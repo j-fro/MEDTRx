@@ -4,8 +4,22 @@ var router = express.Router();
 
 var connString = process.env.DATABASE_URL || 'postgres://localhost:5432/medSched';
 
-router.get('/', function(req, res) {
-    res.send('Here waiting for the organizer..');
+/*
+ * API endpoint for the web client to query a user's statuses. Returns a JSON
+ * array of statuses for the authenticated user. If the query encounters any
+ * error, sends back a 500
+ */
+// TODO: remove email param after authentication implemented
+router.get('/:email', function(req, res) {
+    findWeeklyStatusesByEmail(req.params.email, function(err, result) {
+        if (err) {
+            console.log(err);
+            res.sendStatus(500);
+        } else {
+            console.log(result);
+            res.send(result);
+        }
+    });
 });
 
 /*
@@ -21,21 +35,24 @@ router.post('/:deviceId', function(req, res) {
     findMostRecentStatusByDeviceId(req.params.deviceId, function(err, existing) {
         if (err) {
             console.log(err);
+            res.sendStatus(500);
         // If there are no entries for this device or the most recent entry was
         // not today, make a new entry
         } else if (!existing || existing.created.getDate() !== new Date().getDate()) {
             createStatus(req.params.deviceId, req.body.status, function(err) {
                 if(err) {
                     console.log(err);
+                    res.sendStatus(500);
                 } else {
                     console.log('Success');
+                    res.sendStatus(201);
                 }
             });
         } else {
             console.log('No new entry');
+            res.sendStatus(200);
         }
     });
-    res.sendStatus(501);
 });
 
 router.put('/', function(req, res) {
@@ -66,6 +83,36 @@ function findMostRecentStatusByDeviceId(deviceId, callback) {
         });
 }
 
+/*
+ * Takes an email (user identification) and callback function and queries the
+ * database for the current week's statuses. If there were no errors, executes
+ * the callback with the week's entries for the user in the form (null, [entries])
+ * where null indicates that there was no error. The [entries] CAN be undefined
+ * if the user has no statuses in the DB. Otherwise, executes the callback with
+ * the error
+ */
+function findWeeklyStatusesByEmail(email, callback) {
+    var dateToFind = new Date();
+    dateToFind.setDate(dateToFind.getDate() - dateToFind.getDay());
+    dateToFind.setHours(0);dateToFind.setMinutes(0);dateToFind.setSeconds(0);
+    var query = 'SELECT * FROM statuses ' +
+        'JOIN devices ON statuses.device_name=devices.device_id ' +
+        'JOIN users ON devices.user_id=users.id ' +
+        'WHERE users.email=$1 AND statuses.created >= $2';
+    console.log(dateToFind);
+    pg.connect(connString)
+        .then(function(client, done) {
+            client.query(query, [email, dateToFind])
+                .then(function(result) {
+                    callback(null, result.rows);
+                })
+                .catch(function(err) {
+                    callback(err);
+                });
+            // done();
+        });
+}
+
 function createStatus(deviceId, status, callback) {
     pg.connect(connString)
         .then(function(client, done) {
@@ -77,6 +124,7 @@ function createStatus(deviceId, status, callback) {
                 .catch(function(err) {
                     callback(err);
                 });
+            done();
         });
 }
 
