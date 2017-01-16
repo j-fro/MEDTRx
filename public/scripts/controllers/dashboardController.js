@@ -1,6 +1,8 @@
 angular.module('msApp').controller('DashboardController', ['$scope', function($scope) {
     console.log('ng');
-    $scope.currentWeekDate = "January 16th 2017";
+    var today = new Date();
+    today.setDate(today.getDate() - today.getDay());
+    $scope.currentWeekDate = today;
     $scope.sunday = "Complete";
     $scope.monday = "Complete";
     $scope.tuesday = "--";
