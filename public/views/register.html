@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>MedSched Login</title>
+        <title>MedSched Register</title>
         <script src="vendors/angular.min.js" charset="utf-8"></script>
         <script src="vendors/angular-route.min.js" charset="utf-8"></script>
         <script src="scripts/client.js" charset="utf-8"></script>
@@ -10,13 +10,14 @@
     <body ng-app="msApp">
         <h1>MedSched</h1>
         <h2>Register</h2>
-        <form ng-controller="LoginController">
+        <form ng-controller="RegisterController">
             <label for="email">Email:</label>
             <input type="text" name="email" value="">
             <label for="password">Password:</label>
             <input type="password" name="password" value="">
-            <input type="submit" ng-click="login()" value="Login">
-            <a href="/register">Register</a>
+            <label for="deviceId">Device ID:</label>
+            <input type="text" name="deviceId" value="">
+            <input type="submit" ng-click="register()" value="Register">
         </form>
     </body>
 </html>

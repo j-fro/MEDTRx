@@ -1,3 +1,3 @@
-angular.module('msApp').controller('DashboardController', ['$scope', function($scope) {
+angular.module('msApp').controller('ProfileController', ['$scope', function($scope) {
     console.log('profile');
 }]);
