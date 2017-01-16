@@ -6,8 +6,20 @@
         <script src="vendors/angular.min.js" charset="utf-8"></script>
         <script src="vendors/angular-route.min.js" charset="utf-8"></script>
         <script src="scripts/client.js" charset="utf-8"></script>
+        <script src="scripts/controllers/dashboardController.js" charset="utf-8"></script>
     </head>
-    <body>
-        <h1>MedSched Dashboard</h1>
+    <body ng-app="msApp">
+        <header>
+            <h2>MedSched</h2>
+            <!-- Navbar -->
+            <nav>
+                <ul>
+                    <li><a href="#!/dashboard">Dashboard</a></li>
+                    <li><a href="#!/profile">Profile</a></li>
+                    <li><a href="#!/logout">Logout</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main ng-view></main>
     </body>
 </html>
