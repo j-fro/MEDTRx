@@ -14,5 +14,5 @@ CREATE TABLE statuses (
     id SERIAL PRIMARY KEY,
     device_name VARCHAR(200) NOT NULL,
     status BOOLEAN NOT NULL,
-    created TIMESTAMP NOT NULL
+    created TIMESTAMP NOT NULL DEFAULT NOW()
 );
