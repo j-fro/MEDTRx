@@ -101,7 +101,7 @@ function findWeeklyStatusesByEmail(email, callback) {
         'WHERE users.email=$1 AND statuses.created >= $2';
     console.log(dateToFind);
     pg.connect(connString)
-        .then(function(client, done) {
+        .then(function(client) {
             client.query(query, [email, dateToFind])
                 .then(function(result) {
                     callback(null, result.rows);
@@ -109,13 +109,12 @@ function findWeeklyStatusesByEmail(email, callback) {
                 .catch(function(err) {
                     callback(err);
                 });
-            // done();
         });
 }
 
 function createStatus(deviceId, status, callback) {
     pg.connect(connString)
-        .then(function(client, done) {
+        .then(function(client) {
             client.query('INSERT INTO statuses (device_name, status) VALUES ($1, $2)',
                 [deviceId, status])
                 .then(function() {
@@ -124,7 +123,6 @@ function createStatus(deviceId, status, callback) {
                 .catch(function(err) {
                     callback(err);
                 });
-            done();
         });
 }
 
