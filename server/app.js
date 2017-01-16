@@ -4,6 +4,12 @@ var bodyParser = require('body-parser');
 var path = require('path');
 var app = express();
 
+// Routing Modules
+var organizer = require('./routes/organizer');
+
+// Routes
+app.use('/organizer', organizer);
+
 // bodyParser setup
 app.use(bodyParser.json());
 
