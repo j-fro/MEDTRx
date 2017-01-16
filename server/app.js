@@ -7,11 +7,12 @@ var app = express();
 // Routing Modules
 var organizer = require('./routes/organizer');
 
-// Routes
-app.use('/organizer', organizer);
-
 // bodyParser setup
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+
+// Routes
+app.use('/organizer', organizer);
 
 app.set('port', (process.env.PORT || 3000));
 
