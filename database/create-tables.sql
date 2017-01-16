@@ -7,7 +7,7 @@ CREATE TABLE useres (
 CREATE TABLE devices (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL,
-    device_id INTEGER NOT NULL
+    device_id VARCHAR(200) NOT NULL
 );
 
 CREATE TABLE statuses (
