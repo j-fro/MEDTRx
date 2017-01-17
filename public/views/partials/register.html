@@ -2,9 +2,9 @@
     <h1>Register</h1>
     <form ng-controller="RegisterController">
         <label for="email">Email:</label>
-        <input type="text" name="email" value="">
+        <input type="text" name="email" ng-model="emailIn">
         <label for="password">Password:</label>
-        <input type="password" name="password" value="">
+        <input type="password" name="password" ng-model="passwordIn">
         <label for="deviceId">Device ID:</label>
         <input type="text" name="deviceId" value="">
         <input type="submit" ng-click="register()" value="Register">
