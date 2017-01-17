@@ -14,16 +14,14 @@ angular.module('msApp').controller('DashboardController', ['$scope', '$http', fu
             .then(function(result) {
                 result.data.forEach(function(status) {
                     var day = new Date(status.created).getDay();
-                    $scope.statuses[day] = status.status;
+                    $scope.statuses[day] = status.status ? 'Complete' : 'Missed';
                 });
             });
     };
 
     // Set all days before today to false
     for(i = 0; i < new Date().getDay(); i++) {
-        if(!$scope.statuses[i]) {
-            $scope.statuses[i] = false;
-        }
+        $scope.statuses[i] = 'Missed';
     }
     // Then get the real statuses
     $scope.getStatuses();

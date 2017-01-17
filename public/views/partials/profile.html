@@ -10,3 +10,8 @@
     <button ng-click="addNumber">+</button>
     <input type="submit" name="" value="Save">
 </form>
+<form ng-hide="registeredDevice()">
+    <label>Add your device:</label>
+    <input type="text" ng-model="deviceIdIn">
+    <input type="submit" name="" value="Add Device">
+</form>
