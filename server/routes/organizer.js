@@ -10,12 +10,14 @@ var connString = require('../../utils/dbUtils');
  */
 // TODO: remove email param after authentication implemented
 router.get('/:email', function(req, res) {
+    console.log('req.user', req.user);
+    console.log('authentication', req.isAuthenticated());
     findWeeklyStatusesByEmail(req.params.email, function(err, result) {
         if (err) {
             console.log(err);
             res.sendStatus(500);
         } else {
-            console.log(result);
+            // console.log(result);
             res.send(result);
         }
     });

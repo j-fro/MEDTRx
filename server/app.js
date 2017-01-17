@@ -17,6 +17,9 @@ var registerRouter = require('./routes/register');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+// Serve static files
+app.use(express.static('public'));
+
 app.use(session({
     secret: 'my secret',
     key: 'user',
@@ -29,7 +32,7 @@ app.use(session({
 }));
 
 app.use(passport.initialize());
-app.use(passport.initialize());
+app.use(passport.session());
 
 // Routes
 app.use('/', indexRouter);
@@ -43,7 +46,6 @@ app.listen(app.get('port'), '0.0.0.0', function() {
     console.log('Listening on port', app.get('port'));
 });
 
-// Serve static files
-app.use(express.static('public'));
+
 
 module.exports = app;
