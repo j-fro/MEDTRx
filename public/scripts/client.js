@@ -2,6 +2,14 @@ var msApp = angular.module('msApp', ['ngRoute']);
 
 msApp.config(['$routeProvider', function($routeProvider) {
     $routeProvider
+        .when('/login', {
+            templateUrl: 'views/partials/login.html',
+            controller: 'LoginController'
+        })
+        .when('/register', {
+            templateUrl: 'views/partials/register.html',
+            controller: 'RegisterController'
+        })
         .when('/dashboard', {
             templateUrl: 'views/partials/dashboard.html',
             controller: 'DashboardController'
@@ -17,22 +25,4 @@ msApp.config(['$routeProvider', function($routeProvider) {
         .otherwise({
             redirectTo: 'dashboard'
         });
-}]);
-
-msApp.controller('LoginController', ['$scope', '$http', '$window', function($scope, $http, $window) {
-    console.log('login');
-    $scope.login = function() {
-        console.log('logging in');
-        // TODO add authentication first
-        $window.location.href = '/';
-    };
-}]);
-
-msApp.controller('RegisterController', ['$scope', '$http', '$window', function($scope, $http, $window) {
-    console.log('register');
-    $scope.register = function() {
-        console.log('registering');
-        // TODO add authentication first
-        $window.location.href = '/login';
-    };
 }]);
