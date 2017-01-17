@@ -1,4 +1,4 @@
-angular.module('msApp').controller('DashboardController', ['$scope', '$http', function($scope, $http) {
+angular.module('msApp').controller('DashboardController', ['$scope', '$http', '$window', function($scope, $http, $window) {
     console.log('ng');
     var today = new Date();
     var endOfWeek = today;
@@ -10,17 +10,22 @@ angular.module('msApp').controller('DashboardController', ['$scope', '$http', fu
     $scope.statuses = {};
 
     $scope.getStatuses = function() {
-        $http.get('/organizer/bob@bobmail.com')
+        $http.get('/organizer')
             .then(function(result) {
                 result.data.forEach(function(status) {
                     var day = new Date(status.created).getDay();
                     $scope.statuses[day] = status.status ? 'Complete' : 'Missed';
                 });
+            })
+            .catch(function(error) {
+                if (error.status === 401) {
+                    $window.location.href = '#!/login';
+                }
             });
     };
 
     // Set all days before today to false
-    for(i = 0; i < new Date().getDay(); i++) {
+    for (i = 0; i < new Date().getDay(); i++) {
         $scope.statuses[i] = 'Missed';
     }
     // Then get the real statuses

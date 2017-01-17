@@ -2,13 +2,15 @@ var express = require('express');
 var pg = require('pg');
 var router = express.Router();
 var connString = require('../../utils/dbUtils');
+var checkIfAuthenticated = require('../../utils/auth').checkIfAuthenticated;
 
 /*
  * API endpoint for the web client to query a user's statuses. Returns a JSON
  * array of statuses for the authenticated user. If the query encounters any
  * error, sends back a 500
  */
-router.get('/', function(req, res) {
+router.get('/', checkIfAuthenticated, function(req, res) {
+    console.log('req.user', req.user);
     findWeeklyStatusesByEmail(req.user.email, function(err, result) {
         if (err) {
             console.log(err);
