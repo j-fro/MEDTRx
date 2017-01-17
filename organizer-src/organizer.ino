@@ -34,7 +34,7 @@ void setup() {
 void loop() {
     if(digitalRead(button)) {
         digitalWrite(led, HIGH);
-        String reqBody = String("{\"button reading\":" + String(digitalRead(button), DEC) + " }");
+        String reqBody = String("{\"status\":" + String(digitalRead(button), DEC) + " }");
         request.body = reqBody;
         http.post(request, response, headers);
         delay(1000);
