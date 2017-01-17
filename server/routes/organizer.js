@@ -1,8 +1,7 @@
 var express = require('express');
 var pg = require('pg');
 var router = express.Router();
-
-var connString = process.env.DATABASE_URL || 'postgres://localhost:5432/medSched';
+var connString = require('../../utils/dbUtils.js');
 
 /*
  * API endpoint for the web client to query a user's statuses. Returns a JSON
