@@ -1,8 +1,10 @@
 // Modules
 var express = require('express');
+var session = require('express-session');
 var bodyParser = require('body-parser');
 var path = require('path');
 var passport = require('../strategies/userStrategy');
+
 var app = express();
 
 // Routing Modules
@@ -15,6 +17,18 @@ var registerRouter = require('./routes/register');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+app.use(session({
+    secret: 'my secret',
+    key: 'user',
+    resave: true,
+    saveUninitialized: false,
+    cookie: {
+        maxage: 6000000,
+        secure: false
+    }
+}));
+
+app.use(passport.initialize());
 app.use(passport.initialize());
 
 // Routes
