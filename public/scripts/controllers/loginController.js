@@ -11,7 +11,7 @@ angular.module('msApp').controller('LoginController', ['$scope', '$http', '$wind
         $http.post('/login', toSend)
         .then(function(result) {
             console.log('Success:', result);
-            $window.location.href = '/dashboard';
+            $window.location.href = '/';
         })
         .catch(function(err) {
             console.log('Error', err);
