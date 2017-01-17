@@ -44,4 +44,26 @@ passport.use('local', new LocalStrategy({
     });
 }));
 
+passport.serializeUser(function(user, done) {
+    done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+    pg.connect(connString)
+    .then(function(client) {
+        client.query('SELECT * FROM users WHERE id=$1 LIMIT 1', [id])
+        .then(function(result) {
+            done(null, result.rows[0]);
+        })
+        .catch(function(error) {
+            console.log(error);
+            done(null, false);
+        });
+    })
+    .catch(function(error) {
+        console.log(error);
+        done(null, false);
+    });
+});
+
 module.exports = passport;
