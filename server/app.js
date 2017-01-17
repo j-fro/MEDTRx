@@ -2,6 +2,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var path = require('path');
+var passport = require('../strategies/userStrategy');
 var app = express();
 
 // Routing Modules
@@ -13,6 +14,8 @@ var registerRouter = require('./routes/register');
 // bodyParser setup
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+
+app.use(passport.initialize());
 
 // Routes
 app.use('/', indexRouter);

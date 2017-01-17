@@ -2,8 +2,8 @@
 var express = require('express');
 var path = require('path');
 var pg = require('pg');
-var encrypt = require('../../utils/auth.js').encrypt;
-var connString = require('../../utils/dbUtils.js');
+var encrypt = require('../../utils/auth').encrypt;
+var connString = require('../../utils/dbUtils');
 var router = express.Router();
 
 // router.get('/', function(req, res) {

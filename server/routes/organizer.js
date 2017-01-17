@@ -1,7 +1,7 @@
 var express = require('express');
 var pg = require('pg');
 var router = express.Router();
-var connString = require('../../utils/dbUtils.js');
+var connString = require('../../utils/dbUtils');
 
 /*
  * API endpoint for the web client to query a user's statuses. Returns a JSON
