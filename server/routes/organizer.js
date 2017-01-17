@@ -8,11 +8,8 @@ var connString = require('../../utils/dbUtils');
  * array of statuses for the authenticated user. If the query encounters any
  * error, sends back a 500
  */
-// TODO: remove email param after authentication implemented
-router.get('/:email', function(req, res) {
-    console.log('req.user', req.user);
-    console.log('authentication', req.isAuthenticated());
-    findWeeklyStatusesByEmail(req.params.email, function(err, result) {
+router.get('/', function(req, res) {
+    findWeeklyStatusesByEmail(req.user.email, function(err, result) {
         if (err) {
             console.log(err);
             res.sendStatus(500);
