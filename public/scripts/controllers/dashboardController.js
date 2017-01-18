@@ -1,4 +1,4 @@
-angular.module('msApp').controller('DashboardController', ['$scope', '$http', '$window', function($scope, $http, $window) {
+angular.module('msApp').controller('DashboardController', ['$scope', '$http', '$window', 'AuthFactory', function($scope, $http, $window, AuthFactory) {
     console.log('ng');
     var today = new Date();
     var endOfWeek = today;
@@ -20,6 +20,8 @@ angular.module('msApp').controller('DashboardController', ['$scope', '$http', '$
             .catch(function(error) {
                 if (error.status === 401) {
                     $window.location.href = '#!/login';
+                } else {
+                    console.log(error);
                 }
             });
     };

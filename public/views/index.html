@@ -6,17 +6,19 @@
         <script src="vendors/angular.min.js" charset="utf-8"></script>
         <script src="vendors/angular-route.min.js" charset="utf-8"></script>
         <script src="scripts/client.js" charset="utf-8"></script>
+        <script src="scripts/factories/authFactory.js" charset="utf-8"></script>
         <script src="scripts/controllers/dashboardController.js" charset="utf-8"></script>
         <script src="scripts/controllers/profileController.js" charset="utf-8"></script>
         <script src="scripts/controllers/logoutController.js" charset="utf-8"></script>
         <script src="scripts/controllers/loginController.js" charset="utf-8"></script>
         <script src="scripts/controllers/registerController.js" charset="utf-8"></script>
+        <script src="scripts/controllers/navController.js" charset="utf-8"></script>
     </head>
     <body ng-app="msApp">
-        <header>
+        <header ng-controller="NavController">
             <h2>MedSched</h2>
             <!-- Navbar -->
-            <nav>
+            <nav ng-if="status">
                 <ul>
                     <li><a href="#!/dashboard">Dashboard</a></li>
                     <li><a href="#!/profile">Profile</a></li>
