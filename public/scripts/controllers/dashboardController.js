@@ -1,5 +1,17 @@
 angular.module('msApp').controller('DashboardController', ['$scope', '$http', '$window', 'AuthFactory', function($scope, $http, $window, AuthFactory) {
-    console.log('ng');
+
+    $scope.loggedIn = false;
+
+    AuthFactory.isLoggedIn()
+        .then(function(result) {
+            if (result.status === 200) {
+                $scope.loggedIn = true;
+            }
+        })
+        .catch(function(err) {
+            console.log(err);
+        });
+
     var today = new Date();
     var endOfWeek = today;
     endOfWeek.setDate(today.getDate() - today.getDay());
