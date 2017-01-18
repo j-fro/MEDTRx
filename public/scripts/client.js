@@ -18,10 +18,6 @@ msApp.config(['$routeProvider', function($routeProvider) {
             templateUrl: 'views/partials/profile.html',
             controller: 'ProfileController'
         })
-        .when('/logout', {
-            templateUrl: 'views/partials/logout.html',
-            controller: 'LogoutController'
-        })
         .otherwise({
             redirectTo: 'dashboard'
         });
