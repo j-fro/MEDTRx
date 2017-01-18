@@ -1,17 +1,17 @@
 <h1>Your Profile</h1>
-<form>
+<form class="form-group form-inline">
     <label for="notify-time">Notify After:</label>
-    <input type="time" name="notify-time" ng-model="notifyTime">
-    <input type="submit" name="" value="Save">
+    <input type="time" name="notify-time" ng-model="notifyTime" class="form-control">
+    <input type="submit" name="" value="Save" class="form-control">
 </form>
-<form>
+<form class="form-group form-inline">
     <label>Send Notifications To:</label>
-    <input type="text" name="" value="">
+    <input type="text" name="" value="" class="form-control">
     <button ng-click="addNumber">+</button>
-    <input type="submit" name="" value="Save">
+    <input type="submit" name="" value="Save" class="form-control">
 </form>
-<form ng-hide="registeredDevice()">
+<form ng-hide="registeredDevice()" class="form-group form-inline">
     <label>Add your device:</label>
-    <input type="text" ng-model="deviceIdIn">
-    <input type="submit" ng-click="registerDevice()" value="Add Device">
+    <input type="text" ng-model="deviceIdIn" class="form-control">
+    <input type="submit" ng-click="registerDevice()" value="Add Device" class="form-control">
 </form>
