@@ -27,19 +27,19 @@ router.post('/', function(req, res) {
 });
 
 function createUser(username, hash, callback) {
-    pg.connect(connString)
-    .then(function(client) {
-        client.query('INSERT INTO users (email, password) VALUES ($1, $2)',
-            [username, hash])
-        .then(function(result) {
-            callback(null, result);
-        })
-        .catch(function(error) {
-            callback(error);
-        });
-    })
-    .catch(function(error) {
-        callback(error);
+    pg.connect(connString, function(err, client, end) {
+        if (err) {
+            callback(err);
+        } else {
+            client.query('INSERT INTO users (email, password) VALUES ($1, $2)', [username, hash], function(err, result) {
+                end();
+                if (err) {
+                    callback(err);
+                } else {
+                    callback(null, result);
+                }
+            });
+        }
     });
 }
 

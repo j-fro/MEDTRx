@@ -10,12 +10,13 @@ var checkIfAuthenticated = require('../../utils/auth').checkIfAuthenticated;
  * error, sends back a 500
  */
 router.get('/', checkIfAuthenticated, function(req, res) {
-    console.log('req.user', req.user);
+    console.log('Hit org get');
     findWeeklyStatusesByEmail(req.user.email, function(err, result) {
         if (err) {
             console.log(err);
             res.sendStatus(500);
         } else {
+            console.log('Got results for org');
             // console.log(result);
             res.send(result);
         }
@@ -36,11 +37,11 @@ router.post('/:deviceId', function(req, res) {
         if (err) {
             console.log(err);
             res.sendStatus(500);
-        // If there are no entries for this device or the most recent entry was
-        // not today, make a new entry
+            // If there are no entries for this device or the most recent entry was
+            // not today, make a new entry
         } else if (!existing || existing.created.getDate() !== new Date().getDate()) {
             createStatus(req.params.deviceId, req.body.status, function(err) {
-                if(err) {
+                if (err) {
                     console.log(err);
                     res.sendStatus(500);
                 } else {
@@ -68,19 +69,20 @@ router.put('/', function(req, res) {
  * Otherwise, executes the callback with the error
  */
 function findMostRecentStatusByDeviceId(deviceId, callback) {
-    pg.connect(connString)
-        .then(function(client, done) {
-            client.query('SELECT * FROM statuses WHERE device_name=$1 ORDER BY created DESC LIMIT 1', [deviceId])
-                .then(function(result) {
-                    callback(null, result.rows[0]);
-                })
-                .catch(function(err) {
+    pg.connect(connString, function(err, client, end) {
+        if (err) {
+            callback(err);
+        } else {
+            client.query('SELECT * FROM statuses WHERE device_name=$1 ORDER BY created DESC LIMIT 1', [deviceId], function(err, result) {
+                end();
+                if (err) {
                     callback(err);
-                });
-        })
-        .catch(function(err) {
-            console.log('Error', err);
-        });
+                } else {
+                    callback(null, result.rows[0]);
+                }
+            });
+        }
+    });
 }
 
 /*
@@ -92,38 +94,47 @@ function findMostRecentStatusByDeviceId(deviceId, callback) {
  * the error
  */
 function findWeeklyStatusesByEmail(email, callback) {
+    console.log('Finding weekly statuses');
     var dateToFind = new Date();
     dateToFind.setDate(dateToFind.getDate() - dateToFind.getDay());
-    dateToFind.setHours(0);dateToFind.setMinutes(0);dateToFind.setSeconds(0);
+    dateToFind.setHours(0);
+    dateToFind.setMinutes(0);
+    dateToFind.setSeconds(0);
     var query = 'SELECT * FROM statuses ' +
         'JOIN devices ON statuses.device_name=devices.device_id ' +
         'JOIN users ON devices.user_id=users.id ' +
         'WHERE users.email=$1 AND statuses.created >= $2';
-    console.log(dateToFind);
-    pg.connect(connString)
-        .then(function(client) {
-            client.query(query, [email, dateToFind])
-                .then(function(result) {
-                    callback(null, result.rows);
-                })
-                .catch(function(err) {
+    pg.connect(connString, function(err, client, end) {
+        if (err) {
+            callback(err);
+        } else {
+            client.query(query, [email, dateToFind], function(err, result) {
+                end();
+                if (err) {
                     callback(err);
-                });
-        });
+                } else {
+                    callback(null, result.rows);
+                }
+            });
+        }
+    });
 }
 
 function createStatus(deviceId, status, callback) {
-    pg.connect(connString)
-        .then(function(client) {
-            client.query('INSERT INTO statuses (device_name, status) VALUES ($1, $2)',
-                [deviceId, status])
-                .then(function() {
-                    callback();
-                })
-                .catch(function(err) {
+    pg.connect(connString, function(err, client, end) {
+        if (err) {
+            callback(err);
+        } else {
+            client.query('INSERT INTO statuses (device_name, status) VALUES ($1, $2)', [deviceId, status], function(err) {
+                end();
+                if (err) {
                     callback(err);
-                });
-        });
+                } else {
+                    callback();
+                }
+            });
+        }
+    });
 }
 
 module.exports = router;
