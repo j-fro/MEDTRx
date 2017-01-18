@@ -26,7 +26,7 @@ angular.module('msApp').controller('DashboardController', ['$scope', '$http', '$
             .then(function(result) {
                 result.data.forEach(function(status) {
                     var day = new Date(status.created).getDay();
-                    $scope.statuses[day] = status.status ? 'Complete' : 'Missed';
+                    $scope.statuses[day] = status.status ? 'ok' : 'remove';
                 });
             })
             .catch(function(error) {
@@ -40,7 +40,7 @@ angular.module('msApp').controller('DashboardController', ['$scope', '$http', '$
 
     // Set all days before today to false
     for (i = 0; i < new Date().getDay(); i++) {
-        $scope.statuses[i] = 'Missed';
+        $scope.statuses[i] = 'remove';
     }
     // Then get the real statuses
     $scope.getStatuses();

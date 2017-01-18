@@ -1,34 +1,34 @@
 <section ng-if="loggedIn">
     <h1>Dashboard</h1>
     <h3>Week of {{ currentWeekStart | date:'MMMM d, yyyy' }} - {{ currentWeekEnd | date:'MMMM d, yyyy' }}</h3>
-    <table>
+    <table class="table">
         <tr>
             <td>Sunday</td>
-            <td>{{ statuses[0] }}</td>
+            <td><i class="glyphicon glyphicon-{{ statuses[0] }}"></i></td>
         </tr>
         <tr>
             <td>Monday</td>
-            <td>{{ statuses[1] }}</td>
+            <td><i class="glyphicon glyphicon-{{ statuses[1] }}"></i></td>
         </tr>
         <tr>
             <td>Tuesday</td>
-            <td>{{ statuses[2] }}</td>
+            <td><i class="glyphicon glyphicon-{{ statuses[2] }}"></i></td>
         </tr>
         <tr>
             <td>Wednesday</td>
-            <td>{{ statuses[3] }}</td>
+            <td><i class="glyphicon glyphicon-{{ statuses[3] }}"></i></td>
         </tr>
         <tr>
             <td>Thursday</td>
-            <td>{{ statuses[4] }}</td>
+            <td><i class="glyphicon glyphicon-{{ statuses[4] }}"></i></td>
         </tr>
         <tr>
             <td>Friday</td>
-            <td>{{ statuses[5] }}</td>
+            <td><i class="glyphicon glyphicon-{{ statuses[5] }}"></i></td>
         </tr>
         <tr>
             <td>Saturday</td>
-            <td>{{ statuses[6] }}</td>
+            <td><i class="glyphicon glyphicon-{{ statuses[6] }}"></i></td>
         </tr>
     </table>
 </section>

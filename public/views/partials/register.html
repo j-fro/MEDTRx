@@ -1,12 +1,20 @@
 <section>
     <h1>Register</h1>
-    <form ng-controller="RegisterController">
-        <label for="email">Email:</label>
-        <input type="text" name="email" ng-model="emailIn">
-        <label for="password">Password:</label>
-        <input type="password" name="password" ng-model="passwordIn">
-        <label for="deviceId">Device ID:</label>
-        <input type="text" name="deviceId" value="">
-        <input type="submit" ng-click="register()" value="Register">
+    <form class="form">
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="text" name="email" ng-model="emailIn" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" name="password" ng-model="passwordIn" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="deviceId">Device ID:</label>
+            <input type="text" name="deviceId" value="" class="form-control">
+        </div>
+        <div class="form-group">
+            <input type="submit" ng-click="register()" value="Register" class="form-control">
+        </div>
     </form>
 </section>

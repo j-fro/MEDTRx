@@ -25,7 +25,7 @@ void setup() {
     digitalWrite(power, HIGH);
     pinMode(button, INPUT);
     // TODO update once deployed
-    request.hostname = "10.100.100.66";
+    request.hostname = "10.100.100.171";
     request.port = 3000;
     // TODO update path param when key function is created
     request.path = "/organizer/banana";

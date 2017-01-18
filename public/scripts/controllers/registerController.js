@@ -12,7 +12,7 @@ angular.module('msApp').controller('RegisterController', ['$scope', '$http', '$w
         .then(function(response) {
             console.log(response);
             if(response.status === 201) {
-                $window.location.href = '/login';
+                $window.location.href = '/';
             }
         })
         .catch(function(err) {

@@ -1,0 +1,54 @@
+html, body {
+    height: 100%;
+    background-color: #FFFFF0
+}
+
+header, footer {
+    background-color: #8d2727;
+    color: #FFFFF0;
+    text-align: center;
+}
+
+footer p {
+    line-height: 50px;
+    margin-bottom: 0px;
+}
+
+header h2 {
+    text-align: center;
+}
+
+header a {
+    color: #FFFFF0;
+}
+
+header a:hover {
+    color: #8d2727;
+    background-color: #FFFFF0 !important;
+}
+
+header nav ul li a{
+    border-bottom: 0 !important;
+}
+
+.glyphicon-ok {
+    color: green;
+}
+
+.glyphicon-remove {
+    color: red;
+}
+
+.page-wrap {
+    min-height: 100%;
+    margin-bottom: -50px;
+}
+
+.page-wrap:after {
+  content: "";
+  display: block;
+}
+
+.footer, .page-wrap:after {
+    height: 50px;
+}
