@@ -100,7 +100,7 @@ function findWeeklyStatusesByEmail(email, callback) {
     dateToFind.setHours(0);
     dateToFind.setMinutes(0);
     dateToFind.setSeconds(0);
-    var query = 'SELECT * FROM statuses ' +
+    var query = 'SELECT statuses.* FROM statuses ' +
         'JOIN devices ON statuses.device_name=devices.device_id ' +
         'JOIN users ON devices.user_id=users.id ' +
         'WHERE users.email=$1 AND statuses.created >= $2';
