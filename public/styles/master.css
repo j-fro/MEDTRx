@@ -22,7 +22,7 @@ header a {
     color: #FFFFF0;
 }
 
-header a:hover {
+header a:hover, header a:focus {
     color: #8d2727;
     background-color: #FFFFF0 !important;
 }
@@ -37,6 +37,37 @@ header nav ul li a{
 
 .glyphicon-remove {
     color: red;
+}
+
+.saved-modal {
+    position: fixed;
+    width: 30%;
+    height: 30%;
+    left: 35%;
+    top: 35%;
+    background-color: #8d2727;
+    color: #FFFFF0;
+    text-align: right;;
+    vertical-align: middle;
+    border-radius: 5px;
+}
+
+.saved-modal button {
+    background-color: rgba(0,0,0,0);
+    color: #FFFFF0;
+}
+
+.saved-modal p {
+    margin: auto;
+    text-align: center;
+}
+
+.saved-modal i {
+    color: inherit;
+}
+
+.saved-modal button:hover {
+    color: #b39999;
 }
 
 .page-wrap {

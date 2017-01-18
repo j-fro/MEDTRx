@@ -1,5 +1,6 @@
 angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$window', 'AuthFactory', function($scope, $http, $window, AuthFactory) {
     console.log('profile');
+    $scope.saved = false;
 
     AuthFactory.isLoggedIn()
         .then(function(result) {
@@ -18,6 +19,9 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
         $http.put('/organizer', { deviceId: $scope.deviceIdIn })
             .then(function(response) {
                 console.log(response);
+                if (response.status === 200) {
+                    $scope.saved = true;
+                }
             })
             .catch(function(err) {
                 console.log(err);
