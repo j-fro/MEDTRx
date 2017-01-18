@@ -13,19 +13,22 @@
         <script src="scripts/controllers/loginController.js" charset="utf-8"></script>
         <script src="scripts/controllers/registerController.js" charset="utf-8"></script>
         <script src="scripts/controllers/navController.js" charset="utf-8"></script>
+        <link rel="stylesheet" href="styles/bootstrap.min.css">
     </head>
-    <body ng-app="msApp">
-        <header ng-controller="NavController">
-            <h2>MedSched</h2>
+    <body ng-app="msApp" class="container">
+        <header ng-controller="NavController" class="header">
+
             <!-- Navbar -->
-            <nav ng-if="status">
-                <ul>
-                    <li><a href="#!/dashboard">Dashboard</a></li>
-                    <li><a href="#!/profile">Profile</a></li>
-                    <li><a href="#!/logout">Logout</a></li>
+            <nav>
+                <ul class="nav nav-tabs nav-justified">
+                    <li><h2>MedSched</h2></li>
+                    <li ng-if="loggedIn"><a href="#!/dashboard">Dashboard</a></li>
+                    <li ng-if="loggedIn"><a href="#!/profile">Profile</a></li>
+                    <li ng-if="loggedIn"><a href="#!/logout">Logout</a></li>
                 </ul>
             </nav>
         </header>
         <main ng-view></main>
+        <footer class="footer"></footer>
     </body>
 </html>

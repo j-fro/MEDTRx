@@ -1,10 +1,10 @@
 angular.module('msApp').controller('NavController', ['$scope', '$window', 'AuthFactory', function($scope, $window, AuthFactory) {
     console.log('Nav controller load');
-    $scope.status = false;
+    $scope.loggedIn = false;
     AuthFactory.isLoggedIn()
     .then(function(result) {
         if(result.status === 200) {
-            $scope.status = true;
+            $scope.loggedIn = true;
         }
     })
     .catch(function(err) {
