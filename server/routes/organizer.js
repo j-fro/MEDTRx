@@ -23,6 +23,18 @@ router.get('/', auth.checkIfAuthenticated, function(req, res) {
     });
 });
 
+router.get('/device', auth.checkIfAuthenticated, function(req, res) {
+    findUsersDevice(req.user.id, function(err, result) {
+        console.log('error', err);
+        if (err) {
+            console.log(err);
+            res.sendStatus(500);
+        } else {
+            res.send(result);
+        }
+    });
+});
+
 /*
  * API endpoint for the device to make new entries. Only one entry per device
  * per day should be created. On a POST request, make a new status entry in the
@@ -122,6 +134,32 @@ function findWeeklyStatusesByEmail(email, callback) {
                     callback(err);
                 } else {
                     callback(null, result.rows);
+                }
+            });
+        }
+    });
+}
+
+/*
+ * Finds a device for the supplied userId. If a device is found, executes the
+ * callback with the device's ID in the form (null, deviceId). If an error
+ * occurred, executes the callback with the error [(callback(error))]
+ */
+function findUsersDevice(userId, callback) {
+    pg.connect(connString, function(err, client, end) {
+        if (err) {
+            callback(err);
+        } else {
+            client.query('SELECT device_id FROM devices WHERE user_id=$1 LIMIT 1', [userId], function(err, result) {
+                end();
+                console.log(result.rows);
+                if (err) {
+                    callback(err);
+                }
+                else if(result.rows.length > 0){
+                    callback(err, result.rows[0]);
+                } else {
+                    callback('No device found');
                 }
             });
         }

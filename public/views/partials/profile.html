@@ -1,8 +1,7 @@
 <h1>Your Profile</h1>
 <div class="saved-modal" ng-show="saved">
-    <button class="btn" ng-click="saved=false"><i class="glyphicon glyphicon-remove"></i></button>
+    <button class="btn" ng-click="reload()"><i class="glyphicon glyphicon-remove"></i></button>
     <p class="">Saved data successfully</p>
-
 </div>
 <form class="form-group form-inline">
     <label for="reminder-time">Remind Me After:</label>
@@ -15,8 +14,12 @@
     <button ng-click="addNumber" class="btn btn-default">+</button>
     <input type="submit" value="Save" class="form-control">
 </form>
-<form ng-hide="registeredDevice()" class="form-group form-inline">
+<form ng-hide="registeredDevice" class="form-group form-inline">
     <label>Add your device:</label>
     <input type="text" ng-model="deviceIdIn" class="form-control">
     <input type="submit" ng-click="registerDevice()" value="Add Device" class="form-control">
 </form>
+<div class="form-group form-inline" ng-show="registeredDevice">
+    <label>Your registered device ID:</label>
+    <label>{{ deviceId }}</label>
+</div>

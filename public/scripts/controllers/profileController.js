@@ -1,6 +1,7 @@
 angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$window', 'AuthFactory', function($scope, $http, $window, AuthFactory) {
     console.log('profile');
     $scope.saved = false;
+    $scope.registeredDevice = false;
 
     AuthFactory.isLoggedIn()
         .then(function(result) {
@@ -14,6 +15,23 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
             console.log(err);
             $window.location.href = '#!/login';
         });
+
+    $scope.reload = function() {
+        $window.location.href = '/';
+    };
+
+    $scope.existingDevice = function() {
+        $http.get('/organizer/device')
+            .then(function(result) {
+                console.log(result);
+                $scope.deviceId = result.data.device_id;
+                $scope.registeredDevice =  true;
+            })
+            .catch(function (err) {
+                console.log(err);
+                $scope.registeredDevice =  false;
+            });
+    };
 
     $scope.registerDevice = function() {
         $http.put('/organizer', {
@@ -41,4 +59,6 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
                 console.log(err);
             });
     };
+
+    $scope.existingDevice();
 }]);
