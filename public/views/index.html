@@ -28,7 +28,7 @@
                     <h2>MedSched</h2></li>
                 <li ng-if="loggedIn"><a href="#!/dashboard">Dashboard</a></li>
                 <li ng-if="loggedIn"><a href="#!/profile">Profile</a></li>
-                <li ng-if="loggedIn"><a href="#!/logout">Logout</a></li>
+                <li ng-if="loggedIn"><a ng-click="logout()">Logout</a></li>
             </ul>
         </nav>
     </header>

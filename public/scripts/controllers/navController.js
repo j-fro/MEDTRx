@@ -10,5 +10,12 @@ angular.module('msApp').controller('NavController', ['$scope', '$window', 'AuthF
     .catch(function(err) {
         console.log(err);
     });
-    console.log('status', $scope.status);
+
+    $scope.logout = function() {
+        AuthFactory.logout()
+            .then(function(response) {
+                $scope.loggedIn = false;
+                $window.location.href='/';
+            });
+    };
 }]);
