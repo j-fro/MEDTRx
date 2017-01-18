@@ -2,14 +2,14 @@ var express = require('express');
 var pg = require('pg');
 var router = express.Router();
 var connString = require('../../utils/dbUtils');
-var checkIfAuthenticated = require('../../utils/auth').checkIfAuthenticated;
+var auth = require('../../utils/auth');
 
 /*
  * API endpoint for the web client to query a user's statuses. Returns a JSON
  * array of statuses for the authenticated user. If the query encounters any
  * error, sends back a 500
  */
-router.get('/', checkIfAuthenticated, function(req, res) {
+router.get('/', auth.checkIfAuthenticated, function(req, res) {
     console.log('Hit org get');
     findWeeklyStatusesByEmail(req.user.email, function(err, result) {
         if (err) {
@@ -56,9 +56,17 @@ router.post('/:deviceId', function(req, res) {
     });
 });
 
-router.put('/', function(req, res) {
+router.put('/', auth.checkIfAuthenticated, function(req, res) {
     console.log('Received put with:', req.body);
-    res.sendStatus(501);
+    console.log('From:', req.user);
+    addDeviceToUser(req.body.deviceId, req.user.id, function(err) {
+        if (err) {
+            console.log(err);
+            res.sendStatus(500);
+        } else {
+            res.sendStatus(200);
+        }
+    });
 });
 
 /*
@@ -132,6 +140,18 @@ function createStatus(deviceId, status, callback) {
                 } else {
                     callback();
                 }
+            });
+        }
+    });
+}
+
+function addDeviceToUser(deviceId, userId, callback) {
+    pg.connect(connString, function(err, client, end) {
+        if (err) {
+            callback(err);
+        } else {
+            client.query('INSERT INTO devices (device_id, user_id) VALUES ($1, $2)', [deviceId, userId], function(err) {
+                callback(err);
             });
         }
     });

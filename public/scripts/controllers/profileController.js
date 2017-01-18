@@ -1,4 +1,4 @@
-angular.module('msApp').controller('ProfileController', ['$scope', '$window', 'AuthFactory', function($scope, $window, AuthFactory) {
+angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$window', 'AuthFactory', function($scope, $http, $window, AuthFactory) {
     console.log('profile');
 
     AuthFactory.isLoggedIn()
@@ -13,4 +13,14 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$window', 'A
             console.log(err);
             $window.location.href = '#!/login';
         });
+
+    $scope.registerDevice = function() {
+        $http.put('/organizer', { deviceId: $scope.deviceIdIn })
+            .then(function(response) {
+                console.log(response);
+            })
+            .catch(function(err) {
+                console.log(err);
+            });
+    };
 }]);
