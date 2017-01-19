@@ -1,4 +1,4 @@
-CREATE TABLE useres (
+CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(200) UNIQUE NOT NULL,
     password VARCHAR(200) NOT NULL
@@ -15,4 +15,10 @@ CREATE TABLE statuses (
     device_name VARCHAR(200) NOT NULL,
     status BOOLEAN NOT NULL,
     created TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE reminders (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL UNIQUE REFERENCES users (id) ON DELETE CASCADE,
+    reminder_time TIME NOT NULL
 );
