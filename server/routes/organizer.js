@@ -142,23 +142,19 @@ function findWeeklyStatusesByEmail(email, callback) {
  * occurred, executes the callback with the error [(callback(error))]
  */
 function findUsersDevice(userId, callback) {
-    pg.connect(connString, function(err, client, end) {
-        if (err) {
-            callback(err);
-        } else {
-            client.query('SELECT device_id FROM devices WHERE user_id=$1 LIMIT 1', [userId], function(err, result) {
-                end();
-                console.log(result.rows);
-                if (err) {
-                    callback(err);
-                }
-                else if(result.rows.length > 0){
-                    callback(err, result.rows[0]);
-                } else {
-                    callback('No device found');
-                }
-            });
-        }
+    db.connect(function(client, end) {
+        client.query('SELECT device_id FROM devices WHERE user_id=$1 LIMIT 1', [userId], function(err, result) {
+            end();
+            console.log(result.rows);
+            if (err) {
+                callback(err);
+            }
+            else if(result.rows.length > 0){
+                callback(err, result.rows[0]);
+            } else {
+                callback('No device found');
+            }
+        });
     });
 }
 

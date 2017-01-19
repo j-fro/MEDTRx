@@ -1,5 +1,6 @@
 var express = require('express');
 var pg = require('pg');
+var schedule = require('node-schedule');
 var db = require('../../utils/dbUtils');
 var auth = require('../../utils/auth');
 var router = express.Router();
@@ -8,7 +9,7 @@ router.put('/', auth.checkIfAuthenticated, function(req, res) {
     console.log('Updating reminder for', req.user);
     var timeIn = new Date(req.body.reminderTime);
     var reminderTime = timeIn.getHours() + ':' + timeIn.getMinutes() + ':' + timeIn.getSeconds();
-    console.log('At time', reminderTime);
+
     findTimeByUserId(req.user.id, function(err, result) {
         if (err) {
             console.log(err);
@@ -73,6 +74,17 @@ function updateReminderTime(reminderId, newTime, callback) {
             callback(err);
         });
     });
+}
+
+
+
+function makeTimeObj(time) {
+    console.log(time);
+    time.reminder_time = time.reminder_time.split(':');
+    time.reminder_time = {
+        hours: time.reminder_time[0],
+        minutes: time.reminder_time[1]
+    };
 }
 
 module.exports = router;
