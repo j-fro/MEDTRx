@@ -5,15 +5,15 @@
 
 </div>
 <form class="form-group form-inline">
-    <label for="notify-time">Notify After:</label>
-    <input type="time" name="notify-time" ng-model="notifyTime" class="form-control">
-    <input type="submit" name="" value="Save" class="form-control">
+    <label for="reminder-time">Remind Me After:</label>
+    <input type="time" name="reminder-time" ng-model="reminderTimeIn" class="form-control">
+    <input type="submit" ng-click="saveReminder()" value="Save" class="form-control">
 </form>
 <form class="form-group form-inline">
     <label>Send Notifications To:</label>
     <input type="text" name="" value="" class="form-control">
     <button ng-click="addNumber" class="btn btn-default">+</button>
-    <input type="submit" name="" value="Save" class="form-control">
+    <input type="submit" value="Save" class="form-control">
 </form>
 <form ng-hide="registeredDevice()" class="form-group form-inline">
     <label>Add your device:</label>

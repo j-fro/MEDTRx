@@ -16,12 +16,26 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
         });
 
     $scope.registerDevice = function() {
-        $http.put('/organizer', { deviceId: $scope.deviceIdIn })
+        $http.put('/organizer', {
+                deviceId: $scope.deviceIdIn
+            })
             .then(function(response) {
                 console.log(response);
                 if (response.status === 200) {
                     $scope.saved = true;
                 }
+            })
+            .catch(function(err) {
+                console.log(err);
+            });
+    };
+
+    $scope.saveReminder = function() {
+        $http.put('/reminder', {
+                reminderTime: $scope.reminderTimeIn
+            })
+            .then(function(response) {
+                console.log(response);
             })
             .catch(function(err) {
                 console.log(err);
