@@ -38,46 +38,40 @@ router.put('/', auth.checkIfAuthenticated, function(req, res) {
 function findTimeByUserId(userId, callback) {
     console.log('Finding a time for', userId);
     db.connect(function(client, end) {
-        if (client) {
-            client.query('SELECT id, reminder_time FROM reminders WHERE user_id=$1', [userId], function(err, result) {
-                end();
-                if (err) {
-                    console.log(err);
-                    callback(err);
+        client.query('SELECT id, reminder_time FROM reminders WHERE user_id=$1', [userId], function(err, result) {
+            end();
+            if (err) {
+                console.log(err);
+                callback(err);
+            } else {
+                console.log('Got a result:', result.rows);
+                if (result.rows.length > 0) {
+                    callback(null, result.rows[0]);
                 } else {
-                    console.log('Got a result:', result.rows);
-                    if (result.rows.length > 0) {
-                        callback(null, result.rows[0]);
-                    } else {
-                        callback(null, null);
-                    }
+                    callback(null, null);
                 }
-            });
-        }
+            }
+        });
     });
 }
 
 function addNewReminderTime(userId, reminderTime, callback) {
     console.log('Adding a new time for', userId, 'at', reminderTime);
     db.connect(function(client, end) {
-        if (client) {
-            client.query('INSERT INTO reminders (user_id, reminder_time) VALUES ($1, $2)', [userId, reminderTime], function(err) {
-                end();
-                callback(err);
-            });
-        }
+        client.query('INSERT INTO reminders (user_id, reminder_time) VALUES ($1, $2)', [userId, reminderTime], function(err) {
+            end();
+            callback(err);
+        });
     });
 }
 
 function updateReminderTime(reminderId, newTime, callback) {
     console.log('Updating a reminder', reminderId, newTime);
     db.connect(function(client, end) {
-        if (client) {
-            client.query('UPDATE reminders SET reminder_time=$1 WHERE id=$2', [newTime, reminderId], function(err) {
-                end();
-                callback(err);
-            });
-        }
+        client.query('UPDATE reminders SET reminder_time=$1 WHERE id=$2', [newTime, reminderId], function(err) {
+            end();
+            callback(err);
+        });
     });
 }
 
