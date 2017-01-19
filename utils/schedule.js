@@ -1,6 +1,7 @@
 var pg = require('pg');
 var schedule = require('node-schedule');
 var db = require('../utils/dbUtils');
+var twilio = require('./twilioClient');
 
 function getReminderById(userId, callback) {
     db.connect(function(client, end) {
@@ -35,13 +36,15 @@ var scheduleReminder = function(userId) {
             var reminderDate = new Date(
                 today.getFullYear(),
                 today.getMonth(),
-                today.getDate() + 1,
+                today.getDate(),
                 reminder.reminder_time.slice(0, 2),
-                reminder.reminder_time.slice(3, 5)
+                reminder.reminder_time.slice(3, 5),
+                today.getSeconds() + 10
             );
             console.log('Scheduling for', reminder.user_id, 'at', reminderDate);
             schedule.scheduleJob(reminderDate, function() {
                 console.log('Sending a reminder for', userId);
+                twilio.sendSms('+14152790865', 'Hey look Im a text masssage');
                 scheduleReminder(userId);
             });
         }
