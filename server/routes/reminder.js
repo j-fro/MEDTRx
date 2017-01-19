@@ -1,6 +1,6 @@
 var express = require('express');
 var pg = require('pg');
-var connString = require('../../utils/dbUtils');
+var db = require('../../utils/dbUtils');
 var auth = require('../../utils/auth');
 var router = express.Router();
 
@@ -12,39 +12,33 @@ router.put('/', auth.checkIfAuthenticated, function(req, res) {
     findTimeByUserId(req.user.id, function(err, result) {
         if (err) {
             console.log(err);
-        } else {
+        } else if (result) {
             console.log(result);
-            if (result) {
-                updateReminderTime(result.id, reminderTime, function(err) {
-                    if (err) {
-                        console.log(err);
-                        res.sendStatus(500);
-                    } else {
-                        res.sendStatus(200);
-                    }
-                });
-            } else {
-                addNewReminderTime(req.user.id, reminderTime, function(err) {
-                    if (err) {
-                        console.log(err);
-                        res.sendStatus(500);
-                    } else {
-                        res.sendStatus(200);
-                    }
-                });
-            }
+            updateReminderTime(result.id, reminderTime, function(err) {
+                if (err) {
+                    console.log(err);
+                    res.sendStatus(500);
+                } else {
+                    res.sendStatus(200);
+                }
+            });
+        } else {
+            addNewReminderTime(req.user.id, reminderTime, function(err) {
+                if (err) {
+                    console.log(err);
+                    res.sendStatus(500);
+                } else {
+                    res.sendStatus(200);
+                }
+            });
         }
     });
 });
 
 function findTimeByUserId(userId, callback) {
     console.log('Finding a time for', userId);
-    pg.connect(connString, function(err, client, end) {
-        if (err) {
-            console.log(err);
-            callback(err);
-        } else {
-            console.log('Connected');
+    db.connect(function(client, end) {
+        if (client) {
             client.query('SELECT id, reminder_time FROM reminders WHERE user_id=$1', [userId], function(err, result) {
                 end();
                 if (err) {
@@ -65,12 +59,8 @@ function findTimeByUserId(userId, callback) {
 
 function addNewReminderTime(userId, reminderTime, callback) {
     console.log('Adding a new time for', userId, 'at', reminderTime);
-    pg.connect(connString, function(err, client, end) {
-        if (err) {
-            console.log(err);
-            callback(err);
-        } else {
-            console.log('Connected');
+    db.connect(function(client, end) {
+        if (client) {
             client.query('INSERT INTO reminders (user_id, reminder_time) VALUES ($1, $2)', [userId, reminderTime], function(err) {
                 end();
                 callback(err);
@@ -81,12 +71,8 @@ function addNewReminderTime(userId, reminderTime, callback) {
 
 function updateReminderTime(reminderId, newTime, callback) {
     console.log('Updating a reminder', reminderId, newTime);
-    pg.connect(connString, function(err, client, end) {
-        if (err) {
-            console.log(err);
-            callback(err);
-        } else {
-            console.log('Connected');
+    db.connect(function(client, end) {
+        if (client) {
             client.query('UPDATE reminders SET reminder_time=$1 WHERE id=$2', [newTime, reminderId], function(err) {
                 end();
                 callback(err);

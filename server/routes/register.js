@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var pg = require('pg');
 var encrypt = require('../../utils/auth').encrypt;
-var connString = require('../../utils/dbUtils');
+var db = require('../../utils/dbUtils');
 var router = express.Router();
 
 router.post('/', function(req, res) {
@@ -27,10 +27,8 @@ router.post('/', function(req, res) {
 });
 
 function createUser(username, hash, callback) {
-    pg.connect(connString, function(err, client, end) {
-        if (err) {
-            callback(err);
-        } else {
+    db.connect(function(client, end) {
+        if (client) {
             client.query('INSERT INTO users (email, password) VALUES ($1, $2)', [username, hash], function(err, result) {
                 end();
                 if (err) {

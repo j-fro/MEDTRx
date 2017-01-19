@@ -1,44 +1,35 @@
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var pg = require('pg');
-var connString = require('../utils/dbUtils');
+var db = require('../utils/dbUtils');
 var compare = require('../utils/auth').compare;
 
 passport.use('local', new LocalStrategy({
     passReqToCallback: true
 }, function(req, username, password, done) {
     console.log('hit local strategy callback');
-    pg.connect(connString, function(err, client, end) {
-        if (err) {
-            console.log(err);
-        } else {
-            client.query('SELECT * FROM users WHERE email=$1 LIMIT 1', [username], function(err, result) {
-                if (err) {
-                    end();
-                    console.log(err);
+    db.connect(function(client, end) {
+        if (client) {
+            findUser(username, client, end, function(err, user) {
+                if (user) {
+                    compare(password, user.password, function(err, isMatch) {
+                        if (isMatch) {
+                            console.log('Successful login');
+                            done(null, user, {
+                                message: 'Login Successful'
+                            });
+                        } else {
+                            console.log('Bad PW');
+                            done(null, false, {
+                                message: 'Incorrect Credentials'
+                            });
+                        }
+                    });
                 } else {
-                    var user = result.rows[0];
-                    end();
-                    if (user) {
-                        compare(password, user.password, function(err, isMatch) {
-                            if (isMatch) {
-                                console.log('Successful login');
-                                done(null, user, {
-                                    message: 'Login Successful'
-                                });
-                            } else {
-                                console.log('Bad PW');
-                                done(null, false, {
-                                    message: 'Incorrect Credentials'
-                                });
-                            }
-                        });
-                    } else {
-                        console.log('No user');
-                        done(null, false, {
-                            message: 'Incorrect Credentials'
-                        });
-                    }
+                    console.log('No user');
+                    done(null, false, {
+                        message: 'Incorrect Credentials'
+                    });
                 }
             });
         }
@@ -51,12 +42,8 @@ passport.serializeUser(function(user, done) {
 
 passport.deserializeUser(function(id, done) {
     console.log('Deserializing user');
-    pg.connect(connString, function(err, client, end) {
-        if (err) {
-            end();
-            console.log(err);
-            done(null, false);
-        } else {
+    db.connect(function(client, end) {
+        if (client) {
             client.query('SELECT * FROM users WHERE id=$1 LIMIT 1', [id], function(err, result) {
                 if (err) {
                     end();
@@ -70,5 +57,18 @@ passport.deserializeUser(function(id, done) {
         }
     });
 });
+
+function findUser(username, client, end, callback) {
+    client.query('SELECT * FROM users WHERE email=$1 LIMIT 1', [username], function(err, result) {
+        if (err) {
+            end();
+            callback(err);
+        } else {
+            var user = result.rows[0];
+            end();
+            callback(null, user);
+        }
+    });
+}
 
 module.exports = passport;

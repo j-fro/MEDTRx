@@ -1,7 +1,7 @@
 var express = require('express');
 var pg = require('pg');
 var router = express.Router();
-var connString = require('../../utils/dbUtils');
+var db = require('../../utils/dbUtils');
 var auth = require('../../utils/auth');
 
 /*
@@ -89,10 +89,8 @@ router.put('/', auth.checkIfAuthenticated, function(req, res) {
  * Otherwise, executes the callback with the error
  */
 function findMostRecentStatusByDeviceId(deviceId, callback) {
-    pg.connect(connString, function(err, client, end) {
-        if (err) {
-            callback(err);
-        } else {
+    db.connect(function(client, end) {
+        if (client) {
             client.query('SELECT * FROM statuses WHERE device_name=$1 ORDER BY created DESC LIMIT 1', [deviceId], function(err, result) {
                 end();
                 if (err) {
@@ -124,10 +122,8 @@ function findWeeklyStatusesByEmail(email, callback) {
         'JOIN devices ON statuses.device_name=devices.device_id ' +
         'JOIN users ON devices.user_id=users.id ' +
         'WHERE users.email=$1 AND statuses.created >= $2';
-    pg.connect(connString, function(err, client, end) {
-        if (err) {
-            callback(err);
-        } else {
+    db.connect(function(client, end) {
+        if (client) {
             client.query(query, [email, dateToFind], function(err, result) {
                 end();
                 if (err) {
@@ -167,10 +163,8 @@ function findUsersDevice(userId, callback) {
 }
 
 function createStatus(deviceId, status, callback) {
-    pg.connect(connString, function(err, client, end) {
-        if (err) {
-            callback(err);
-        } else {
+    db.connect(function(client, end) {
+        if (client) {
             client.query('INSERT INTO statuses (device_name, status) VALUES ($1, $2)', [deviceId, status], function(err) {
                 end();
                 if (err) {
@@ -184,10 +178,8 @@ function createStatus(deviceId, status, callback) {
 }
 
 function addDeviceToUser(deviceId, userId, callback) {
-    pg.connect(connString, function(err, client, end) {
-        if (err) {
-            callback(err);
-        } else {
+    db.connect(function(client, end) {
+        if (client) {
             client.query('INSERT INTO devices (device_id, user_id) VALUES ($1, $2)', [deviceId, userId], function(err) {
                 callback(err);
             });
