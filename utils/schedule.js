@@ -43,8 +43,17 @@ var scheduleReminder = function(userId) {
             );
             console.log('Scheduling for', reminder.user_id, 'at', reminderDate);
             schedule.scheduleJob(reminderDate, function() {
-                console.log('Sending a reminder for', userId);
-                twilio.sendSms('+14152790865', 'Hey look Im a text masssage');
+                db.findUsersLastStatus(userId, function(status) {
+                    console.log('Found a status:', status);
+                    if (status) {
+                        status.created = new Date(status.created);
+                        status.created = status.created.setHours(status.created.getHours() + 12);
+                    }
+                    if (!status || new Date(status.created).getDate() === today.getDate()) {
+                        console.log('Sending a reminder for', userId);
+                        twilio.sendSms('+14152790865', 'Hey look Im a text messsage');
+                    }
+                });
                 scheduleReminder(userId);
             });
         }
