@@ -3,34 +3,10 @@ var schedule = require('node-schedule');
 var db = require('../utils/dbUtils');
 var twilio = require('./twilioClient');
 
-function getReminderById(userId, callback) {
-    db.connect(function(client, end) {
-        client.query('SELECT * FROM reminders WHERE user_id=$1', [userId], function(err, result) {
-            end();
-            if (err) {
-                callback(err);
-            } else {
-                callback(null, result.rows[0]);
-            }
-        });
-    });
-}
 
-function getAllReminderTimes(callback) {
-    db.connect(function(client, end) {
-        client.query('SELECT * FROM reminders', function(err, result) {
-            end();
-            if (err) {
-                callback(err);
-            } else {
-                callback(null, result.rows);
-            }
-        });
-    });
-}
 
 var scheduleReminder = function(userId) {
-    getReminderById(userId, function(err, reminder) {
+    db.getReminderById(userId, function(err, reminder) {
         if (reminder) {
             var today = new Date();
             var reminderDate = new Date(
@@ -51,7 +27,11 @@ var scheduleReminder = function(userId) {
                     }
                     if (!status || new Date(status.created).getDate() === today.getDate()) {
                         console.log('Sending a reminder for', userId);
-                        twilio.sendSms('+14152790865', 'Hey look Im a text messsage');
+                        db.findUserContactsByType(userId, 'phone', function(result) {
+                            result.forEach(function(contact) {
+                                twilio.sendSms(contact.contact, 'Hey look Im a text messsage');
+                            });
+                        });
                     }
                 });
                 scheduleReminder(userId);
