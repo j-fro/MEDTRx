@@ -1,6 +1,6 @@
 <h1>Your Profile</h1>
 <div class="saved-modal" ng-show="saved">
-    <button class="btn" ng-click="reload()"><i class="glyphicon glyphicon-remove"></i></button>
+    <button class="btn" ng-click="saved = !saved"><i class="glyphicon glyphicon-remove"></i></button>
     <p class="">Saved data successfully</p>
 </div>
 <form class="form-group form-inline">
@@ -10,9 +10,13 @@
 </form>
 <form class="form-group form-inline">
     <label>Send Notifications To:</label>
-    <input type="text" name="" value="" class="form-control">
-    <button ng-click="addNumber" class="btn btn-default">+</button>
-    <input type="submit" value="Save" class="form-control">
+    <input type="text" name="" ng-model="contact" class="form-control">
+    <!-- <button ng-click="addNumber" class="btn btn-default">+</button> -->
+    <select class="form-control" ng-model="contactType" ng-init="contactType='phone'">
+        <option value="phone" selected>Mobile</option>
+    </select>
+    <input type="submit" ng-click="saveContact()" value="Save" class="form-control">
+    <p ng-repeat="contact in contacts">{{ contact.contact }} ({{ contact.contact_type }})</p>
 </form>
 <form ng-hide="registeredDevice" class="form-group form-inline">
     <label>Add your device:</label>

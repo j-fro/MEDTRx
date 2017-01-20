@@ -16,20 +16,18 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
             $window.location.href = '#!/login';
         });
 
-    $scope.reload = function() {
-        $window.location.href = '/';
-    };
+
 
     $scope.existingDevice = function() {
         $http.get('/organizer/device')
             .then(function(result) {
                 console.log(result);
                 $scope.deviceId = result.data.device_id;
-                $scope.registeredDevice =  true;
+                $scope.registeredDevice = true;
             })
-            .catch(function (err) {
+            .catch(function(err) {
                 console.log(err);
-                $scope.registeredDevice =  false;
+                $scope.registeredDevice = false;
             });
     };
 
@@ -41,6 +39,7 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
                 console.log(response);
                 if (response.status === 200) {
                     $scope.saved = true;
+                    $scope.existingDevice();
                 }
             })
             .catch(function(err) {
@@ -60,5 +59,38 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
             });
     };
 
-    $scope.existingDevice();
+    $scope.existingContact = () => {
+        $http.get('/contact')
+            .then((response) => {
+                $scope.contacts = response.data;
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
+    $scope.saveContact = () => {
+        var contactToSend = {
+            contact: $scope.contact,
+            contactType: $scope.contactType
+        };
+
+        $http.post('/contact', contactToSend)
+            .then(function(response) {
+                if (response.status === 201) {
+                    $scope.saved = true;
+                    $scope.existingContact();
+                }
+            })
+            .catch(function(err) {
+                console.log(err);
+            });
+    };
+
+    $scope.init = function() {
+        $scope.existingDevice();
+        $scope.existingContact();
+    };
+
+    $scope.init();
 }]);

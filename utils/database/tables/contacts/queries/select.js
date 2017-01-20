@@ -29,7 +29,7 @@ function allByUser(userId, callback) {
             if (err) {
                 console.log(err);
             } else {
-                console.log('Result', result.rows);
+                // console.log('Contact result', result.rows);
                 callback(result.rows);
             }
         });

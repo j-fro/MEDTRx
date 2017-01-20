@@ -14,6 +14,7 @@ var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 var registerRouter = require('./routes/register');
 var reminderRouter = require('./routes/reminder');
+const contactRouter = require('./routes/contact');
 
 // bodyParser setup
 app.use(bodyParser.json());
@@ -42,6 +43,7 @@ app.use('/organizer', organizerRouter);
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
 app.use('/reminder', reminderRouter);
+app.use('/contact', contactRouter);
 
 app.set('port', (process.env.PORT || 3000));
 
