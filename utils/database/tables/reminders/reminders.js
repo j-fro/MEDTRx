@@ -1,5 +1,3 @@
-// const update = require('./update');
-
 module.exports = {
     update: require('./queries/update'),
     insert: require('./queries/insert'),

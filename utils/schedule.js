@@ -17,7 +17,7 @@ var scheduleReminder = function(userId) {
             );
             console.log('Scheduling for', reminder.user_id, 'at', reminderDate);
             schedule.scheduleJob(reminderDate, function() {
-                db.findUsersLastStatus(userId, function(status) {
+                db.statuses.select.mostRecentByUserId(userId, function(status) {
                     console.log('Found a status:', status);
                     if (status) {
                         status.created = new Date(status.created);
@@ -25,7 +25,7 @@ var scheduleReminder = function(userId) {
                     }
                     if (!status || new Date(status.created).getDate() === today.getDate()) {
                         console.log('Sending a reminder for', userId);
-                        db.findUserContactsByType(userId, 'phone', function(result) {
+                        db.contacts.select.oneByUserIdAndType(userId, 'phone', function(result) {
                             result.forEach(function(contact) {
                                 twilio.sendSms(contact.contact, 'Hey look Im a text messsage');
                             });

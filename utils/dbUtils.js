@@ -14,61 +14,61 @@ function connect(callback) {
     });
 }
 
-function findUsersLastStatus(userId, callback) {
-    connect(function(client, end) {
-        var query = `
-        SELECT created FROM statuses
-        JOIN devices ON statuses.device_name=devices.device_id
-        WHERE devices.user_id=$1
-        ORDER BY created DESC LIMIT 1
-        `;
-        client.query(query, [userId], function(err, result) {
-            end();
-            if (err) {
-                console.log(err);
-            } else {
-                console.log('Result', result.rows);
-                callback(result.rows[0]);
-            }
-        });
-    });
-}
+// function findUsersLastStatus(userId, callback) {
+//     connect(function(client, end) {
+//         var query = `
+//         SELECT created FROM statuses
+//         JOIN devices ON statuses.device_name=devices.device_id
+//         WHERE devices.user_id=$1
+//         ORDER BY created DESC LIMIT 1
+//         `;
+//         client.query(query, [userId], function(err, result) {
+//             end();
+//             if (err) {
+//                 console.log(err);
+//             } else {
+//                 console.log('Result', result.rows);
+//                 callback(result.rows[0]);
+//             }
+//         });
+//     });
+// }
 
-function findUserContacts(userId, callback) {
-    connect(function(client, end) {
-        var query = `
-        SELECT contact, contact_type FROM contacts
-        WHERE user_id=$1
-        `;
-        client.query(query, [userId], function(err, result) {
-            end();
-            if (err) {
-                console.log(err);
-            } else {
-                console.log('Result', result.rows);
-                callback(result.rows);
-            }
-        });
-    });
-}
-
-function findUserContactsByType(userId, contactType, callback) {
-    connect(function(client, end) {
-        var query = `
-        SELECT contact FROM contacts
-        WHERE user_id=$1 AND contact_type=$2
-        `;
-        client.query(query, [userId, contactType], function(err, result) {
-            end();
-            if (err) {
-                console.log(err);
-            } else {
-                console.log('Result', result.rows);
-                callback(result.rows);
-            }
-        });
-    });
-}
+// function findUserContacts(userId, callback) {
+//     connect(function(client, end) {
+//         var query = `
+//         SELECT contact, contact_type FROM contacts
+//         WHERE user_id=$1
+//         `;
+//         client.query(query, [userId], function(err, result) {
+//             end();
+//             if (err) {
+//                 console.log(err);
+//             } else {
+//                 console.log('Result', result.rows);
+//                 callback(result.rows);
+//             }
+//         });
+//     });
+// }
+//
+// function findUserContactsByType(userId, contactType, callback) {
+//     connect(function(client, end) {
+//         var query = `
+//         SELECT contact FROM contacts
+//         WHERE user_id=$1 AND contact_type=$2
+//         `;
+//         client.query(query, [userId, contactType], function(err, result) {
+//             end();
+//             if (err) {
+//                 console.log(err);
+//             } else {
+//                 console.log('Result', result.rows);
+//                 callback(result.rows);
+//             }
+//         });
+//     });
+// }
 
 // Pulled
 // function updateReminderTime(reminderId, newTime, callback) {
@@ -149,8 +149,5 @@ function findUserContactsByType(userId, contactType, callback) {
 
 module.exports = {
     connect: connect,
-    connString: connString,
-    findUsersLastStatus: findUsersLastStatus,
-    findUserContacts: findUserContacts,
-    findUserContactsByType: findUserContactsByType
+    connString: connString
 };

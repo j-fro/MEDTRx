@@ -1,7 +1,5 @@
-let api = {
-    reminders: require('./tables/reminders/reminders')
+module.exports = {
+    reminders: require('./tables/reminders/reminders'),
+    contacts: require('./tables/contacts/contacts'),
+    statuses: require('./tables/statuses/statuses')
 };
-
-console.log(api);
-
-module.exports = api;
