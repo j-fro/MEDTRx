@@ -13,6 +13,8 @@ var publicApi = {
             });
     },
     compare: function(candidatePassword, hash, callback) {
+        console.log('Cand:', candidatePassword);
+        console.log('Hash:', hash);
         bcrypt.compare(candidatePassword, hash)
             .then(function(isMatch) {
                 callback(null, isMatch);
