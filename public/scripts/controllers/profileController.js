@@ -16,8 +16,6 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
             $window.location.href = '#!/login';
         });
 
-
-
     $scope.existingDevice = function() {
         $http.get('/organizer/device')
             .then(function(result) {
@@ -47,12 +45,22 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
             });
     };
 
+    $scope.existingReminder = function() {
+        $http.get('/reminder')
+            .then(function(response) {
+                $scope.reminderTime = response.data.reminder_time;
+            })
+            .catch(function(err) {
+                console.log(err);
+            });
+    };
+
     $scope.saveReminder = function() {
         $http.put('/reminder', {
                 reminderTime: $scope.reminderTimeIn
             })
             .then(function(response) {
-                console.log(response);
+                $scope.saved = true;
             })
             .catch(function(err) {
                 console.log(err);
@@ -79,6 +87,7 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
             .then(function(response) {
                 if (response.status === 201) {
                     $scope.saved = true;
+                    $scope.contact = undefined;
                     $scope.existingContact();
                 }
             })
@@ -90,6 +99,8 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
     $scope.init = function() {
         $scope.existingDevice();
         $scope.existingContact();
+        $scope.existingReminder();
+        $scope.editing = null;
     };
 
     $scope.init();

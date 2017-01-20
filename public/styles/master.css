@@ -50,6 +50,7 @@ header nav ul li a{
     text-align: right;;
     vertical-align: middle;
     border-radius: 5px;
+    z-index: 1;
 }
 
 .saved-modal button {

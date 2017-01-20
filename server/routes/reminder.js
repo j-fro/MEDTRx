@@ -1,12 +1,25 @@
-var express = require('express');
-var pg = require('pg');
-var schedule = require('node-schedule');
+const express = require('express');
+const pg = require('pg');
+const schedule = require('node-schedule');
 // var db = require('../../utils/dbUtils');
 const db = require('../../utils/database/db');
-var auth = require('../../utils/auth');
-var router = express.Router();
+const auth = require('../../utils/auth');
+let router = express.Router();
 
-router.put('/', auth.checkIfAuthenticated, function(req, res) {
+router.use(auth.checkIfAuthenticated);
+
+router.get('/', (req, res) => {
+    db.reminders.select.oneByUserId(req.user.id, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.sendStatus(501);
+        } else {
+            res.send(result);
+        }
+    });
+});
+
+router.put('/', function(req, res) {
     console.log('Updating reminder for', req.user);
     var timeIn = new Date(req.body.reminderTime);
     var reminderTime = timeIn.getHours() + ':' + timeIn.getMinutes() + ':' + timeIn.getSeconds();

@@ -3,27 +3,46 @@
     <button class="btn" ng-click="saved = !saved"><i class="glyphicon glyphicon-remove"></i></button>
     <p class="">Saved data successfully</p>
 </div>
-<form class="form-group form-inline">
-    <label for="reminder-time">Remind Me After:</label>
-    <input type="time" name="reminder-time" ng-model="reminderTimeIn" class="form-control">
-    <input type="submit" ng-click="saveReminder()" value="Save" class="form-control">
+<form class="form-group form-inline row">
+    <label for="reminder-time" class="col-xs-5 col-md-3">Remind Me After:</label>
+    <div class="col-xs-5 col-md-3">
+        <input type="time" name="reminder-time" value="{{ reminderTime | date:'HH:mm' }}" ng-model="reminderTimeIn" class="form-control">
+    </div>
+    <input type="submit" ng-click="saveReminder()" value="Save" class="col-xs-2 btn btn-default">
 </form>
-<form class="form-group form-inline">
-    <label>Send Notifications To:</label>
-    <input type="text" name="" ng-model="contact" class="form-control">
+<form class="form-group form-inline row">
+    <label class="col-xs-5 col-md-3">Send Notifications To:</label>
+    <div class="col-xs-5 col-md-3">
+        <input type="text" name="" ng-model="contact" class="form-control">
+    </div>
     <!-- <button ng-click="addNumber" class="btn btn-default">+</button> -->
-    <select class="form-control" ng-model="contactType" ng-init="contactType='phone'">
-        <option value="phone" selected>Mobile</option>
-    </select>
-    <input type="submit" ng-click="saveContact()" value="Save" class="form-control">
-    <p ng-repeat="contact in contacts">{{ contact.contact }} ({{ contact.contact_type }})</p>
+    <div class="col-xs-1">
+        <select class="form-control" ng-model="contactType" ng-init="contactType='phone'">
+            <option value="phone" selected>Mobile</option>
+        </select>
+    </div>
+    <div class="">
+        <input type="submit" ng-click="saveContact()" value="Save" class="col-xs-1 btn btn-default">
+    </div>
 </form>
-<form ng-hide="registeredDevice" class="form-group form-inline">
-    <label>Add your device:</label>
-    <input type="text" ng-model="deviceIdIn" class="form-control">
-    <input type="submit" ng-click="registerDevice()" value="Add Device" class="form-control">
+<div ng-repeat="contact in contacts" class="row">
+    <label ng-hide="editing === contact.$index" class="col-xs-5 col-md-3 col-xs-offset-5 col-md-offset-3">{{ contact.contact }} ({{ contact.contact_type }})</label>
+    <div ng-show="editing === contact.$index" class="col-xs-5 col-md-3 col-xs-offset-5 col-md-offset-3">
+        <input class="form-control" type="text" value="{{ contact.contact }}">
+    </div>
+    <button class="btn btn-default col-xs-1" ng-click="editing=contact.$index" ng-hide="editing === contact.$index"><i class="glyphicon glyphicon-edit"></i></button>
+    <button class="btn btn-default col-xs-1" ng-click="editing=null;editContact" ng-show="editing === contact.$index"><i class="glyphicon glyphicon-ok"></i></button>
+    <button class="btn btn-default col-xs-1" ng-click="removeContact(contact)"><i class="glyphicon glyphicon-remove"></i></button>
+</div>
+
+<form ng-hide="registeredDevice" class="form-group form-inline row">
+    <label class="col-xs-5 col-md-3">Add your device:</label>
+    <div class="col-xs-5 col-md-3">
+        <input type="text" ng-model="deviceIdIn" class="form-control">
+    </div>
+    <input type="submit" ng-click="registerDevice()" value="Add Device" class="btn btn-default col-xs-2">
 </form>
-<div class="form-group form-inline" ng-show="registeredDevice">
-    <label>Your registered device ID:</label>
-    <label>{{ deviceId }}</label>
+<div class="form-group form-inline row" ng-show="registeredDevice">
+    <label class="col-xs-5 col-md-3">Your registered device ID:</label>
+    <label class="col-xs-5 col-md-3">{{ deviceId }}</label>
 </div>
