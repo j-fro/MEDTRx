@@ -1,12 +1,12 @@
 var pg = require('pg');
 var schedule = require('node-schedule');
-var db = require('../utils/dbUtils');
+var db = require('../utils/database/db');
 var twilio = require('./twilioClient');
 
 
 
 var scheduleReminder = function(userId) {
-    db.getReminderById(userId, function(err, reminder) {
+    db.reminders.select.oneByUserId(userId, function(err, reminder) {
         if (reminder) {
             var today = new Date();
             var reminderDate = new Date(

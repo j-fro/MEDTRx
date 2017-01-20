@@ -1,7 +1,8 @@
 var express = require('express');
 var pg = require('pg');
 var schedule = require('node-schedule');
-var db = require('../../utils/dbUtils');
+// var db = require('../../utils/dbUtils');
+const db = require('../../utils/database/db');
 var auth = require('../../utils/auth');
 var router = express.Router();
 
@@ -10,12 +11,12 @@ router.put('/', auth.checkIfAuthenticated, function(req, res) {
     var timeIn = new Date(req.body.reminderTime);
     var reminderTime = timeIn.getHours() + ':' + timeIn.getMinutes() + ':' + timeIn.getSeconds();
 
-    db.findTimeByUserId(req.user.id, function(err, result) {
+    db.reminders.select.oneByUserId(req.user.id, function(err, result) {
         if (err) {
             console.log(err);
         } else if (result) {
             console.log(result);
-            db.updateReminderTime(result.id, reminderTime, function(err) {
+            db.reminders.update.timeByUserId(result.id, reminderTime, function(err) {
                 if (err) {
                     console.log(err);
                     res.sendStatus(500);
@@ -24,7 +25,7 @@ router.put('/', auth.checkIfAuthenticated, function(req, res) {
                 }
             });
         } else {
-            db.addNewReminderTime(req.user.id, reminderTime, function(err) {
+            db.reminders.insert.byUserId(req.user.id, reminderTime, function(err) {
                 if (err) {
                     console.log(err);
                     res.sendStatus(500);
