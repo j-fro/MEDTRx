@@ -1,4 +1,4 @@
-const connect = require('../../connect').connect;
+const connect = require('../../../connect').connect;
 
 function timeByUserId(reminderId, newTime, callback) {
     console.log('Updating a reminder', reminderId, newTime);

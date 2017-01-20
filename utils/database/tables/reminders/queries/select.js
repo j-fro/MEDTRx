@@ -1,4 +1,4 @@
-const connect = require('../../connect').connect;
+const connect = require('../../../connect').connect;
 
 function oneByUserId(userId, callback) {
     console.log('Finding a time for', userId);

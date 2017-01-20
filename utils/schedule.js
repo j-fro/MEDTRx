@@ -3,8 +3,6 @@ var schedule = require('node-schedule');
 var db = require('../utils/database/db');
 var twilio = require('./twilioClient');
 
-
-
 var scheduleReminder = function(userId) {
     db.reminders.select.oneByUserId(userId, function(err, reminder) {
         if (reminder) {
