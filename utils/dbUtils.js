@@ -33,8 +33,44 @@ function findUsersLastStatus(userId, callback) {
     });
 }
 
+function findUserContacts(userId, callback) {
+    connect(function(client, end) {
+        var query = `
+        SELECT contact, contact_type FROM contacts
+        WHERE user_id=$1
+        `;
+        client.query(query, [userId], function(err, result) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log('Result', result.rows);
+                callback(result.rows);
+            }
+        });
+    });
+}
+
+function findUserContactsByType(userId, contactType, callback) {
+    connect(function(client, end) {
+        var query = `
+        SELECT contact FROM contacts
+        WHERE user_id=$1 AND contact_type=$2
+        `;
+        client.query(query, [userId, contact_type], function(err, result) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log('Result', result.rows);
+                callback(result.rows);
+            }
+        });
+    });
+}
+
 module.exports = {
     connect: connect,
     connString: connString,
-    findUsersLastStatus: findUsersLastStatus
+    findUsersLastStatus: findUsersLastStatus,
+    findUserContacts: findUserContacts,
+    findUserContactsByType: findUserContactsByType
 };

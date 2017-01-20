@@ -22,3 +22,10 @@ CREATE TABLE reminders (
     user_id INTEGER NOT NULL UNIQUE REFERENCES users (id) ON DELETE CASCADE,
     reminder_time TIME NOT NULL
 );
+
+CREATE TABLE contacts (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    contact_type VARCHAR(10) NOT NULL,
+    contact VARCHAR(300) NOT NULL
+);
