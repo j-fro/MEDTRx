@@ -2,7 +2,6 @@ const connect = require('../../../connect').connect;
 
 function oneByUserId(userId, callback) {
     console.log('Finding a time for', userId);
-    console.log('Connect:', connect);
     connect(function(client, end) {
         var query = `
             SELECT * FROM reminders
