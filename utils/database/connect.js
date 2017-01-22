@@ -1,9 +1,9 @@
-var pg = require('pg');
+const pg = require('pg');
 
-var connString = process.env.DATABASE_URL || 'postgres://localhost:5432/medSched';
+const connString = process.env.DATABASE_URL || 'postgres://localhost:5432/medSched';
 
 function connect(callback) {
-    pg.connect(connString, function(err, client, end) {
+    pg.connect(connString, (err, client, end) => {
         if (err) {
             console.log(err);
         } else {
