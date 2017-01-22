@@ -18,6 +18,24 @@ function byUserEmail(email, callback) {
     });
 }
 
+function byUserId(id, callback) {
+    connect((client, end) => {
+        let query = `
+        SELECT * FROM users
+        WHERE id=$1 LIMIT 1
+        `;
+        client.query(query, [id], (err, result) => {
+            end();
+            if (err) {
+                console.log(err);
+            } else {
+                callback(result.rows[0]);
+            }
+        });
+    });
+}
+
 module.exports = {
-    byUserEmail: byUserEmail
+    byUserEmail: byUserEmail,
+    byUserId: byUserId
 };
