@@ -1,19 +1,19 @@
 // Modules
-var express = require('express');
-var session = require('express-session');
-var bodyParser = require('body-parser');
-var path = require('path');
-var passport = require('../strategies/userStrategy');
-var scheduleReminder = require('../utils/schedule');
+const express = require('express');
+const session = require('express-session');
+const bodyParser = require('body-parser');
+const path = require('path');
+const passport = require('../strategies/userStrategy');
+const scheduleReminder = require('../utils/schedule');
 
-var app = express();
+let app = express();
 
 // Routing Modules
-var organizerRouter = require('./routes/organizer');
-var indexRouter = require('./routes/index');
-var loginRouter = require('./routes/login');
-var registerRouter = require('./routes/register');
-var reminderRouter = require('./routes/reminder');
+const organizerRouter = require('./routes/organizer');
+const indexRouter = require('./routes/index');
+const loginRouter = require('./routes/login');
+const registerRouter = require('./routes/register');
+const reminderRouter = require('./routes/reminder');
 const contactRouter = require('./routes/contact');
 
 // bodyParser setup
@@ -52,7 +52,5 @@ app.listen(app.get('port'), '0.0.0.0', function() {
     scheduleReminder(4);
     scheduleReminder(6);
 });
-
-
 
 module.exports = app;

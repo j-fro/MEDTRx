@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const db = require('../../utils/database/db');
 const auth = require('../../utils/auth');
-const router = express.Router();
+let router = express.Router();
 
 router.use(auth.checkIfAuthenticated);
 

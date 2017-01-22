@@ -1,9 +1,8 @@
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-var pg = require('pg');
-var db2 = require('../utils/dbUtils');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const pg = require('pg');
 const db = require('../utils/database/db');
-var compare = require('../utils/auth').compare;
+const compare = require('../utils/auth').compare;
 
 passport.use('local', new LocalStrategy({
     passReqToCallback: true
