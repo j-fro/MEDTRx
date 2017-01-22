@@ -48,6 +48,8 @@ angular.module('msApp').controller('DashboardController', ['$scope', '$http', '$
         console.log(oneWeekAgo);
         $http.get('/organizer/' + oneWeekAgo)
             .then(function(result) {
+                $scope.currentWeekStart = oneWeekAgo;
+                $scope.currentWeekEnd = new Date(oneWeekAgo).setDate(oneWeekAgo.getDate() + 7);
                 for (i = 0; i < 7; i++) {
                     $scope.statuses[i] = 'remove';
                 }
