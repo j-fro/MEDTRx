@@ -1,26 +1,52 @@
 var express = require('express');
 var pg = require('pg');
 var router = express.Router();
-var db = require('../../utils/dbUtils');
+var db2 = require('../../utils/dbUtils');
 var auth = require('../../utils/auth');
+const db = require('../../utils/database/db');
 
 /*
  * API endpoint for the web client to query a user's statuses. Returns a JSON
  * array of statuses for the authenticated user. If the query encounters any
  * error, sends back a 500
  */
-router.get('/', auth.checkIfAuthenticated, function(req, res) {
+router.get('/:weekStartDate?', auth.checkIfAuthenticated, function(req, res) {
     console.log('Hit org get');
-    findWeeklyStatusesByEmail(req.user.email, function(err, result) {
-        if (err) {
+    // findWeeklyStatusesByEmail(req.user.email, function(err, result) {
+    //     if (err) {
+    //         console.log(err);
+    //         res.sendStatus(500);
+    //     } else {
+    //         console.log('Got results for org');
+    //         // console.log(result);
+    //         res.send(result);
+    //     }
+    // });
+
+    let weekStartDate;
+    if (req.params.weekStartDate) {
+        console.log('ifffffing');
+        weekStartDate = new Date(req.params.weekStartDate);
+    } else {
+        console.log('elssssing');
+        let today = new Date();
+        today.setDate(today.getDate() - today.getDay());
+        console.log('Today:', today);
+        weekStartDate = today;
+    }
+    let weekEndDate = new Date(weekStartDate);
+
+    weekEndDate.setDate(weekEndDate.getDate() + 7);
+    console.log('Week start date:', weekStartDate);
+    db.statuses.select.weeklyByUserId(req.user.id, weekStartDate, weekEndDate)
+        .then((result) => {
+            console.log(result);
+            res.send(result);
+        })
+        .catch((err) => {
             console.log(err);
             res.sendStatus(500);
-        } else {
-            console.log('Got results for org');
-            // console.log(result);
-            res.send(result);
-        }
-    });
+        });
 });
 
 router.get('/device', auth.checkIfAuthenticated, function(req, res) {
@@ -89,7 +115,7 @@ router.put('/', auth.checkIfAuthenticated, function(req, res) {
  * Otherwise, executes the callback with the error
  */
 function findMostRecentStatusByDeviceId(deviceId, callback) {
-    db.connect(function(client, end) {
+    db2.connect(function(client, end) {
         if (client) {
             client.query('SELECT * FROM statuses WHERE device_name=$1 ORDER BY created DESC LIMIT 1', [deviceId], function(err, result) {
                 end();
@@ -122,7 +148,7 @@ function findWeeklyStatusesByEmail(email, callback) {
         'JOIN devices ON statuses.device_name=devices.device_id ' +
         'JOIN users ON devices.user_id=users.id ' +
         'WHERE users.email=$1 AND statuses.created >= $2';
-    db.connect(function(client, end) {
+    db2.connect(function(client, end) {
         if (client) {
             client.query(query, [email, dateToFind], function(err, result) {
                 end();
@@ -142,7 +168,7 @@ function findWeeklyStatusesByEmail(email, callback) {
  * occurred, executes the callback with the error [(callback(error))]
  */
 function findUsersDevice(userId, callback) {
-    db.connect(function(client, end) {
+    db2.connect(function(client, end) {
         client.query('SELECT device_id FROM devices WHERE user_id=$1 LIMIT 1', [userId], function(err, result) {
             end();
             console.log(result.rows);
@@ -159,7 +185,7 @@ function findUsersDevice(userId, callback) {
 }
 
 function createStatus(deviceId, status, callback) {
-    db.connect(function(client, end) {
+    db2.connect(function(client, end) {
         if (client) {
             client.query('INSERT INTO statuses (device_name, status) VALUES ($1, $2)', [deviceId, status], function(err) {
                 end();
@@ -174,7 +200,7 @@ function createStatus(deviceId, status, callback) {
 }
 
 function addDeviceToUser(deviceId, userId, callback) {
-    db.connect(function(client, end) {
+    db2.connect(function(client, end) {
         if (client) {
             client.query('INSERT INTO devices (device_id, user_id) VALUES ($1, $2)', [deviceId, userId], function(err) {
                 callback(err);

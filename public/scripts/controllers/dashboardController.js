@@ -25,6 +25,33 @@ angular.module('msApp').controller('DashboardController', ['$scope', '$http', '$
         $http.get('/organizer')
             .then(function(result) {
                 result.data.forEach(function(status) {
+                    for (i = 0; i < new Date().getDay(); i++) {
+                        $scope.statuses[i] = 'remove';
+                    }
+                    var day = new Date(status.created).getDay();
+                    $scope.statuses[day] = status.status ? 'ok' : 'remove';
+                });
+            })
+            .catch(function(error) {
+                if (error.status === 401) {
+                    $window.location.href = '#!/login';
+                } else {
+                    console.log(error);
+                }
+            });
+    };
+
+    $scope.goBackOneWeek = function() {
+        var oneWeekAgo = new Date();
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - oneWeekAgo.getDay() - 7);
+        // oneWeekAgo.setDay(0);
+        console.log(oneWeekAgo);
+        $http.get('/organizer/' + oneWeekAgo)
+            .then(function(result) {
+                for (i = 0; i < 7; i++) {
+                    $scope.statuses[i] = 'remove';
+                }
+                result.data.forEach(function(status) {
                     var day = new Date(status.created).getDay();
                     $scope.statuses[day] = status.status ? 'ok' : 'remove';
                 });
