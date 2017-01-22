@@ -47,7 +47,29 @@ function weeklyByUserId(userId, weekStartDate, weekEndDate) {
     });
 }
 
+function earliestByUserId(userId) {
+    return new Promise((resolve, reject) => {
+        connect((client, end) => {
+            let query = `
+            SELECT created FROM statuses
+            JOIN devices ON statuses.device_name=devices.device_id
+            WHERE devices.user_id=$1
+            ORDER BY created ASC LIMIT 1
+            `;
+            client.query(query, [userId], (err, result) => {
+                end();
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result.rows[0]);
+                }
+            });
+        });
+    });
+}
+
 module.exports = {
     mostRecentByUserId: mostRecentByUserId,
-    weeklyByUserId: weeklyByUserId
+    weeklyByUserId: weeklyByUserId,
+    earliestByUserId: earliestByUserId
 };

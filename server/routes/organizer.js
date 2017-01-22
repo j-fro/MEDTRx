@@ -5,30 +5,25 @@ var db2 = require('../../utils/dbUtils');
 var auth = require('../../utils/auth');
 const db = require('../../utils/database/db');
 
+router.get('/earliest', auth.checkIfAuthenticated, (req, res) => {
+    db.statuses.select.earliestByUserId(req.user.id)
+        .then(result => res.send(result))
+        .catch((err) => {
+            console.log(err);
+            res.sendStatus(500);
+        });
+});
+
 /*
  * API endpoint for the web client to query a user's statuses. Returns a JSON
  * array of statuses for the authenticated user. If the query encounters any
  * error, sends back a 500
  */
 router.get('/:weekStartDate?', auth.checkIfAuthenticated, function(req, res) {
-    console.log('Hit org get');
-    // findWeeklyStatusesByEmail(req.user.email, function(err, result) {
-    //     if (err) {
-    //         console.log(err);
-    //         res.sendStatus(500);
-    //     } else {
-    //         console.log('Got results for org');
-    //         // console.log(result);
-    //         res.send(result);
-    //     }
-    // });
-
     let weekStartDate;
     if (req.params.weekStartDate) {
-        console.log('ifffffing');
         weekStartDate = new Date(req.params.weekStartDate);
     } else {
-        console.log('elssssing');
         let today = new Date();
         today.setDate(today.getDate() - today.getDay());
         console.log('Today:', today);
@@ -48,6 +43,8 @@ router.get('/:weekStartDate?', auth.checkIfAuthenticated, function(req, res) {
             res.sendStatus(500);
         });
 });
+
+
 
 router.get('/device', auth.checkIfAuthenticated, function(req, res) {
     findUsersDevice(req.user.id, function(err, result) {

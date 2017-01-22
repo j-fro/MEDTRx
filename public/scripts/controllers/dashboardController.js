@@ -67,6 +67,16 @@ angular.module('msApp').controller('DashboardController', ['$scope', '$http', '$
             });
     };
 
+    $scope.checkHistory = function() {
+        $http.get('/organizer/earliest')
+            .then(function(response) {
+                console.log(buildHistory(new Date(response.data.created)));
+            })
+            .catch(function(err) {
+                console.log(err);
+            });
+    };
+
     // Set all days before today to false
     for (i = 0; i < new Date().getDay(); i++) {
         $scope.statuses[i] = 'remove';
@@ -74,3 +84,24 @@ angular.module('msApp').controller('DashboardController', ['$scope', '$http', '$
     // Then get the real statuses
     $scope.getStatuses();
 }]);
+
+function buildHistory(firstDate) {
+    firstDate.setDate(firstDate.getDate() - firstDate.getDay());
+    firstDate.setHours(0);
+    firstDate.setMinutes(0);
+    firstDate.setSeconds(0);
+    console.log('First Date:', firstDate);
+    let result = [];
+    while(firstDate <= new Date()) {
+        let weekEnd = new Date(firstDate);
+        weekEnd.setDate(firstDate.getDate() + 7);
+        weekEnd.setSeconds(weekEnd.getSeconds() - 1);
+        result.push({
+            start: firstDate,
+            end: weekEnd
+        });
+        firstDate = new Date(weekEnd);
+        firstDate.setSeconds(firstDate.getSeconds() + 1);
+    }
+    return result;
+}
