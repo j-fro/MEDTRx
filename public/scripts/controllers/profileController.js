@@ -100,20 +100,23 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
     };
 
     $scope.editContact = function(contact) {
+        var newContact = $scope.contactValues[contact.id];
         console.log('Editing contact:', contact);
-        console.log('And its new value is:', $scope.contactValues[contact.id]);
-        var contactToSend = {
-            contactId: contact.id,
-            contact: $scope.contactValues[contact.id]
-        };
-        $http.put('/contact', contactToSend)
-            .then(function(response) {
-                $scope.saved = true;
-                $scope.existingContact();
-            })
-            .catch(function(err) {
-                console.log(err);
-            });
+        console.log('And its new value is:', newContact);
+        if (newContact !== contact.contact) {
+            var contactToSend = {
+                contactId: contact.id,
+                contact: newContact
+            };
+            $http.put('/contact', contactToSend)
+                .then(function(response) {
+                    $scope.saved = true;
+                    $scope.existingContact();
+                })
+                .catch(function(err) {
+                    console.log(err);
+                });
+        }
     };
 
     $scope.removeContact = function(contactId) {
