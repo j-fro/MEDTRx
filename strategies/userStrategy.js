@@ -9,7 +9,7 @@ passport.use('local', new LocalStrategy({
     passReqToCallback: true
 }, function(req, username, password, done) {
     console.log('hit local strategy callback');
-    db.users.select.byUserId(username, function(user) {
+    db.users.select.byUserEmail(username, function(user) {
         if (user) {
             compare(password, user.password, function(err, isMatch) {
                 if (isMatch) {

@@ -1,12 +1,12 @@
 const connect = require('../../../connect').connect;
 
 function oneByUserIdAndType(userId, contactType, callback) {
-    connect(function(client, end) {
-        var query = `
+    connect((client, end) => {
+        let query = `
         SELECT contact FROM contacts
         WHERE user_id=$1 AND contact_type=$2
         `;
-        client.query(query, [userId, contactType], function(err, result) {
+        client.query(query, [userId, contactType], (err, result) => {
             end();
             if (err) {
                 console.log(err);
@@ -19,12 +19,12 @@ function oneByUserIdAndType(userId, contactType, callback) {
 }
 
 function allByUser(userId, callback) {
-    connect(function(client, end) {
+    connect((client, end) => {
         var query = `
-        SELECT * FROM contacts
+        SELECT * FROM contactsg
         WHERE user_id=$1
         `;
-        client.query(query, [userId], function(err, result) {
+        client.query(query, [userId], (err, result) => {
             end();
             if (err) {
                 console.log(err);

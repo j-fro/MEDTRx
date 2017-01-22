@@ -1,12 +1,12 @@
 const connect = require('../../../connect').connect;
 
 function byUserEmail(email, callback) {
-    connect(function(client, end) {
-        var query = `
+    connect((client, end) => {
+        let query = `
         SELECT * FROM users
         WHERE email=$1
         `;
-        client.query(query, [email], function(err, result) {
+        client.query(query, [email], (err, result) => {
             end();
             if (err) {
                 console.log(err);
@@ -19,5 +19,5 @@ function byUserEmail(email, callback) {
 }
 
 module.exports = {
-    byUserId: byUserEmail
+    byUserEmail: byUserEmail
 };

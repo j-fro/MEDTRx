@@ -1,12 +1,12 @@
 const connect = require('../../../connect').connect;
 
 function byUsernameAndHash(username, hash, callback) {
-    connect(function(client, end) {
-        var query = `
+    connect((client, end) => {
+        let query = `
         INSERT INTO users (email, password) VALUES ($1, $2)
         `;
         if (client) {
-            client.query(query, [username, hash], function(err, result) {
+            client.query(query, [username, hash], (err, result) => {
                 end();
                 if (err) {
                     callback(err);

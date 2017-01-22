@@ -2,12 +2,12 @@ const connect = require('../../../connect').connect;
 
 function oneByUserId(userId, callback) {
     console.log('Finding a time for', userId);
-    connect(function(client, end) {
-        var query = `
+    connect((client, end) => {
+        let query = `
             SELECT * FROM reminders
             WHERE user_id=$1
         `;
-        client.query(query, [userId], function(err, result) {
+        client.query(query, [userId], (err, result) => {
             end();
             if (err) {
                 console.log(err);
@@ -25,8 +25,8 @@ function oneByUserId(userId, callback) {
 }
 
 function all(callback) {
-    connect(function(client, end) {
-        client.query('SELECT * FROM reminders', function(err, result) {
+    connect((client, end) => {
+        client.query('SELECT * FROM reminders', (err, result) => {
             end();
             if (err) {
                 callback(err);
