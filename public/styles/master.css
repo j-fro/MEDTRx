@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css?family=Comfortaa');
+
 html, body {
     height: 100%;
-    background-color: #FFFFF0
+    background-color: #FFFFF0;
+    font-family: 'Comfortaa', sans-serif;;
 }
 
 header, footer {
