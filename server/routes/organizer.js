@@ -14,7 +14,7 @@ router.get('/earliest', auth.checkIfAuthenticated, (req, res) => {
         });
 });
 
-router.get('/device', auth.checkIfAuthenticated, function(req, res) {
+router.get('/device', auth.checkIfAuthenticated, (req, res) => {
     findUsersDevice(req.user.id, function(err, result) {
         console.log('error', err);
         if (err) {
@@ -64,7 +64,7 @@ router.get('/:weekStartDate?', auth.checkIfAuthenticated, function(req, res) {
  *    the request URL)
  * 2) the most recent entry for the sending device was not on the current day
  */
-router.post('/:deviceId', function(req, res) {
+router.post('/:deviceId', (req, res) => {
     console.log('Received post from device:', req.params.deviceId, 'with data', req.body);
     findMostRecentStatusByDeviceId(req.params.deviceId, function(err, existing) {
         if (err) {
@@ -73,12 +73,11 @@ router.post('/:deviceId', function(req, res) {
             // If there are no entries for this device or the most recent entry was
             // not today, make a new entry
         } else if (!existing || existing.created.getDate() !== new Date().getDate()) {
-            createStatus(req.params.deviceId, req.body.status, function(err) {
+            db.statuses.insert.status(req.params.deviceId, req.body.status, (err) => {
                 if (err) {
                     console.log(err);
                     res.sendStatus(500);
                 } else {
-                    console.log('Success');
                     res.sendStatus(201);
                 }
             });
@@ -89,7 +88,7 @@ router.post('/:deviceId', function(req, res) {
     });
 });
 
-router.put('/', auth.checkIfAuthenticated, function(req, res) {
+router.put('/', auth.checkIfAuthenticated, (req, res) => {
     console.log('Received put with:', req.body);
     console.log('From:', req.user);
     addDeviceToUser(req.body.deviceId, req.user.id, function(err) {
@@ -169,8 +168,7 @@ function findUsersDevice(userId, callback) {
             console.log(result.rows);
             if (err) {
                 callback(err);
-            }
-            else if(result.rows.length > 0){
+            } else if (result.rows.length > 0) {
                 callback(err, result.rows[0]);
             } else {
                 callback('No device found');
@@ -189,16 +187,6 @@ function createStatus(deviceId, status, callback) {
                 } else {
                     callback();
                 }
-            });
-        }
-    });
-}
-
-function addDeviceToUser(deviceId, userId, callback) {
-    db2.connect(function(client, end) {
-        if (client) {
-            client.query('INSERT INTO devices (device_id, user_id) VALUES ($1, $2)', [deviceId, userId], function(err) {
-                callback(err);
             });
         }
     });
