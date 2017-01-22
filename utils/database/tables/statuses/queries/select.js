@@ -68,8 +68,22 @@ function earliestByUserId(userId) {
     });
 }
 
+function mostRecentByDeviceId(deviceId, callback) {
+    connect((client, end) => {
+        let query = `
+        SELECT * FROM statuses
+        WHERE device_name=$1
+        ORDER BY created DESC LIMIT 1
+        `;
+        client.query(query, [deviceId], (err, result) => {
+            callback(err, result.rows[0]);
+        });
+    });
+}
+
 module.exports = {
     mostRecentByUserId: mostRecentByUserId,
     weeklyByUserId: weeklyByUserId,
-    earliestByUserId: earliestByUserId
+    earliestByUserId: earliestByUserId,
+    mostRecentByDeviceId: mostRecentByDeviceId
 };

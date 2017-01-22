@@ -66,7 +66,7 @@ router.get('/:weekStartDate?', auth.checkIfAuthenticated, function(req, res) {
  */
 router.post('/:deviceId', (req, res) => {
     console.log('Received post from device:', req.params.deviceId, 'with data', req.body);
-    findMostRecentStatusByDeviceId(req.params.deviceId, function(err, existing) {
+    db.statuses.select.mostRecentByDeviceId(req.params.deviceId, (err, existing) => {
         if (err) {
             console.log(err);
             res.sendStatus(500);
@@ -108,20 +108,20 @@ router.put('/', auth.checkIfAuthenticated, (req, res) => {
  * error. The [entry] CAN be undefined if the device ID was not found in the DB.
  * Otherwise, executes the callback with the error
  */
-function findMostRecentStatusByDeviceId(deviceId, callback) {
-    db2.connect(function(client, end) {
-        if (client) {
-            client.query('SELECT * FROM statuses WHERE device_name=$1 ORDER BY created DESC LIMIT 1', [deviceId], function(err, result) {
-                end();
-                if (err) {
-                    callback(err);
-                } else {
-                    callback(null, result.rows[0]);
-                }
-            });
-        }
-    });
-}
+// function findMostRecentStatusByDeviceId(deviceId, callback) {
+//     db2.connect(function(client, end) {
+//         if (client) {
+//             client.query('SELECT * FROM statuses WHERE device_name=$1 ORDER BY created DESC LIMIT 1', [deviceId], function(err, result) {
+//                 end();
+//                 if (err) {
+//                     callback(err);
+//                 } else {
+//                     callback(null, result.rows[0]);
+//                 }
+//             });
+//         }
+//     });
+// }
 
 /*
  * Takes an email (user identification) and callback function and queries the
