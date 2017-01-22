@@ -71,6 +71,9 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
         $http.get('/contact')
             .then((response) => {
                 $scope.contacts = response.data;
+                response.data.forEach(function(contact) {
+                    $scope.contactValues[contact.id] = contact.contact;
+                });
             })
             .catch((err) => {
                 console.log(err);
@@ -96,11 +99,22 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
             });
     };
 
-    // $scope.updateContact = function() {
-    //     var contactToSend = {
-    //         contactId:
-    //     }
-    // }
+    $scope.editContact = function(contact) {
+        console.log('Editing contact:', contact);
+        console.log('And its new value is:', $scope.contactValues[contact.id]);
+        var contactToSend = {
+            contactId: contact.id,
+            contact: $scope.contactValues[contact.id]
+        };
+        $http.put('/contact', contactToSend)
+            .then(function(response) {
+                $scope.saved = true;
+                $scope.existingContact();
+            })
+            .catch(function(err) {
+                console.log(err);
+            });
+    };
 
     $scope.removeContact = function(contactId) {
         $http.delete('/contact/' + contactId)
@@ -118,6 +132,7 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
         $scope.existingContact();
         $scope.existingReminder();
         $scope.editing = null;
+        $scope.contactValues = {};
     };
 
     $scope.init();
