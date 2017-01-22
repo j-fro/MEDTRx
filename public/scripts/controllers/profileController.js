@@ -96,6 +96,23 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
             });
     };
 
+    // $scope.updateContact = function() {
+    //     var contactToSend = {
+    //         contactId:
+    //     }
+    // }
+
+    $scope.removeContact = function(contactId) {
+        $http.delete('/contact/' + contactId)
+            .then(function(response) {
+                $scope.saved = true;
+                $scope.existingContact();
+            })
+            .catch(function(err) {
+                console.log(err);
+            });
+    };
+
     $scope.init = function() {
         $scope.existingDevice();
         $scope.existingContact();
