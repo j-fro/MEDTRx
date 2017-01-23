@@ -79,6 +79,10 @@ header nav ul li a{
     margin: 10px 0 10px 0;
 }
 
+input.ng-invalid.ng-touched {
+    background-color: rgba(255, 0, 0, .5);
+}
+
 .page-wrap {
     min-height: 100%;
     margin-bottom: -50px;
