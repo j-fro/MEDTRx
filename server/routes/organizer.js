@@ -1,6 +1,5 @@
 const express = require('express');
 const pg = require('pg');
-var db2 = require('../../utils/dbUtils');
 const auth = require('../../utils/auth');
 const db = require('../../utils/database/db');
 let router = express.Router();
