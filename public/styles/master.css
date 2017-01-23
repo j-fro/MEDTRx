@@ -1,9 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Comfortaa');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono:700');
 
 html, body {
     height: 100%;
     background-color: #FFFFF0;
-    font-family: 'Comfortaa', sans-serif;;
+    font-family: 'Comfortaa', sans-serif;
 }
 
 header, footer {
@@ -95,4 +96,9 @@ input.ng-invalid.ng-touched {
 
 .footer, .page-wrap:after {
     height: 50px;
+}
+
+h2 {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 44px;
 }
