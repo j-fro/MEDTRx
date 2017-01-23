@@ -1,37 +1,44 @@
 <section ng-if="loggedIn">
     <h1>Dashboard</h1>
-    <h3>Week of {{ currentWeekStart | date:'MMMM d, yyyy' }} - {{ currentWeekEnd | date:'MMMM d, yyyy' }}</h3>
-    <table class="table">
-        <tr>
-            <td>Sunday</td>
-            <td><i class="glyphicon glyphicon-{{ statuses[0] }}"></i></td>
-        </tr>
-        <tr>
-            <td>Monday</td>
-            <td><i class="glyphicon glyphicon-{{ statuses[1] }}"></i></td>
-        </tr>
-        <tr>
-            <td>Tuesday</td>
-            <td><i class="glyphicon glyphicon-{{ statuses[2] }}"></i></td>
-        </tr>
-        <tr>
-            <td>Wednesday</td>
-            <td><i class="glyphicon glyphicon-{{ statuses[3] }}"></i></td>
-        </tr>
-        <tr>
-            <td>Thursday</td>
-            <td><i class="glyphicon glyphicon-{{ statuses[4] }}"></i></td>
-        </tr>
-        <tr>
-            <td>Friday</td>
-            <td><i class="glyphicon glyphicon-{{ statuses[5] }}"></i></td>
-        </tr>
-        <tr>
-            <td>Saturday</td>
-            <td><i class="glyphicon glyphicon-{{ statuses[6] }}"></i></td>
-        </tr>
-    </table>
-    <!-- <a href="#!/history">History</a> -->
-    <button ng-click="goBackOneWeek()">Go back a week</button>
-    <button ng-click="checkHistory()">History</button>
+    <section ng-hide="viewHistory">
+        <h3>Week of {{ currentWeekStart | date:'MMMM d, yyyy' }} - {{ currentWeekEnd | date:'MMMM d, yyyy' }}</h3>
+        <table class="table">
+            <tr>
+                <td>Sunday</td>
+                <td><i class="glyphicon glyphicon-{{ statuses[0] }}"></i></td>
+            </tr>
+            <tr>
+                <td>Monday</td>
+                <td><i class="glyphicon glyphicon-{{ statuses[1] }}"></i></td>
+            </tr>
+            <tr>
+                <td>Tuesday</td>
+                <td><i class="glyphicon glyphicon-{{ statuses[2] }}"></i></td>
+            </tr>
+            <tr>
+                <td>Wednesday</td>
+                <td><i class="glyphicon glyphicon-{{ statuses[3] }}"></i></td>
+            </tr>
+            <tr>
+                <td>Thursday</td>
+                <td><i class="glyphicon glyphicon-{{ statuses[4] }}"></i></td>
+            </tr>
+            <tr>
+                <td>Friday</td>
+                <td><i class="glyphicon glyphicon-{{ statuses[5] }}"></i></td>
+            </tr>
+            <tr>
+                <td>Saturday</td>
+                <td><i class="glyphicon glyphicon-{{ statuses[6] }}"></i></td>
+            </tr>
+        </table>
+    </section>
+    <button ng-click="checkHistory()" class="btn btn-default">History</button>
+    <section ng-show="viewHistory">
+        <ul>
+            <li ng-repeat="week in history" ng-click="showHistory(week)" class="history-week">
+                {{ week.start | date:'MMMM d, yyyy' }} - {{ week.end | date:'MMMM d, yyyy' }}
+            </li>
+        </ul>
+    </section>
 </section>

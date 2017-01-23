@@ -74,6 +74,10 @@ header nav ul li a{
     color: #b39999;
 }
 
+.history-week:hover {
+    cursor: pointer;
+}
+
 .page-wrap {
     min-height: 100%;
     margin-bottom: -50px;

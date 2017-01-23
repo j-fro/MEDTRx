@@ -1,9 +1,9 @@
-var express = require('express');
-var pg = require('pg');
-var router = express.Router();
+const express = require('express');
+const pg = require('pg');
 var db2 = require('../../utils/dbUtils');
-var auth = require('../../utils/auth');
+const auth = require('../../utils/auth');
 const db = require('../../utils/database/db');
+let router = express.Router();
 
 router.get('/earliest', auth.checkIfAuthenticated, (req, res) => {
     db.statuses.select.earliestByUserId(req.user.id)
@@ -12,6 +12,18 @@ router.get('/earliest', auth.checkIfAuthenticated, (req, res) => {
             console.log(err);
             res.sendStatus(500);
         });
+});
+
+router.get('/device', auth.checkIfAuthenticated, function(req, res) {
+    findUsersDevice(req.user.id, function(err, result) {
+        console.log('error', err);
+        if (err) {
+            console.log(err);
+            res.sendStatus(500);
+        } else {
+            res.send(result);
+        }
+    });
 });
 
 /*
@@ -42,20 +54,6 @@ router.get('/:weekStartDate?', auth.checkIfAuthenticated, function(req, res) {
             console.log(err);
             res.sendStatus(500);
         });
-});
-
-
-
-router.get('/device', auth.checkIfAuthenticated, function(req, res) {
-    findUsersDevice(req.user.id, function(err, result) {
-        console.log('error', err);
-        if (err) {
-            console.log(err);
-            res.sendStatus(500);
-        } else {
-            res.send(result);
-        }
-    });
 });
 
 /*
