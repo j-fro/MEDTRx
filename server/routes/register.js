@@ -18,8 +18,15 @@ router.post('/', function(req, res) {
                     console.log(err);
                     res.sendStatus(500);
                 } else {
-                    console.log('Success');
-                    res.sendStatus(201);
+                    createUserDevice(req.body.email, req.body.deviceId)
+                        .then((message) => {
+                            console.log(message);
+                            res.sendStatus(201);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            res.sendStatus(500);
+                        });
                 }
             });
         }
@@ -27,3 +34,19 @@ router.post('/', function(req, res) {
 });
 
 module.exports = router;
+
+function createUserDevice(userEmail, deviceId) {
+    return new Promise((resolve, reject) => {
+        if (deviceId) {
+            db.users.select.byUserEmail(userEmail, function(user) {
+                if (user) {
+                    db.devices.insert.one(deviceId, user.id)
+                        .then(() => resolve("Success"))
+                        .catch(err => reject(err));
+                }
+            });
+        } else {
+            resolve("No device Id present");
+        }
+    });
+}

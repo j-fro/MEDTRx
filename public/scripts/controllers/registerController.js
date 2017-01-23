@@ -6,7 +6,8 @@ angular.module('msApp').controller('RegisterController', ['$scope', '$http', '$w
         // $window.location.href = '/login';
         var userToSend = {
             email: $scope.emailIn,
-            password: $scope.passwordIn
+            password: $scope.passwordIn,
+            deviceId: $scope.deviceIdIn
         };
         $http.post('register/', userToSend)
         .then(function(response) {
