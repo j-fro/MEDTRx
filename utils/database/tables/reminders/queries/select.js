@@ -24,15 +24,17 @@ function oneByUserId(userId, callback) {
     });
 }
 
-function all(callback) {
-    connect((client, end) => {
-        client.query('SELECT * FROM reminders', (err, result) => {
-            end();
-            if (err) {
-                callback(err);
-            } else {
-                callback(null, result.rows);
-            }
+function all() {
+    return new Promise((resolve, reject) => {
+        connect((client, end) => {
+            client.query('SELECT * FROM reminders', (err, result) => {
+                end();
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result.rows);
+                }
+            });
         });
     });
 }
