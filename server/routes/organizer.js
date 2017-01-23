@@ -98,40 +98,4 @@ router.put('/', auth.checkIfAuthenticated, (req, res) => {
     });
 });
 
-/*
- * Finds a device for the supplied userId. If a device is found, executes the
- * callback with the device's ID in the form (null, deviceId). If an error
- * occurred, executes the callback with the error [(callback(error))]
- */
-function findUsersDevice(userId, callback) {
-    db2.connect(function(client, end) {
-        client.query('SELECT device_id FROM devices WHERE user_id=$1 LIMIT 1', [userId], function(err, result) {
-            end();
-            console.log(result.rows);
-            if (err) {
-                callback(err);
-            } else if (result.rows.length > 0) {
-                callback(err, result.rows[0]);
-            } else {
-                callback('No device found');
-            }
-        });
-    });
-}
-
-function createStatus(deviceId, status, callback) {
-    db2.connect(function(client, end) {
-        if (client) {
-            client.query('INSERT INTO statuses (device_name, status) VALUES ($1, $2)', [deviceId, status], function(err) {
-                end();
-                if (err) {
-                    callback(err);
-                } else {
-                    callback();
-                }
-            });
-        }
-    });
-}
-
 module.exports = router;
