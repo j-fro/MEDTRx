@@ -13,21 +13,6 @@ function status(deviceName, status, callback) {
     });
 }
 
-function createStatus(deviceId, status, callback) {
-    db2.connect(function(client, end) {
-        if (client) {
-            client.query('INSERT INTO statuses (device_name, status) VALUES ($1, $2)', [deviceId, status], function(err) {
-                end();
-                if (err) {
-                    callback(err);
-                } else {
-                    callback();
-                }
-            });
-        }
-    });
-}
-
 module.exports = {
     status: status
 };

@@ -33,12 +33,11 @@
             </tr>
         </table>
     </section>
-    <button ng-click="checkHistory()" class="btn btn-default">History</button>
+    <button ng-hide="viewHistory" ng-click="checkHistory()" class="btn btn-default">History</button>
+    <button ng-show="viewHistory" ng-click="hideHistory()" class="btn btn-default">Back to Record</button>
     <section ng-show="viewHistory">
-        <ul>
-            <li ng-repeat="week in history" ng-click="showHistory(week)" class="history-week">
-                {{ week.start | date:'MMMM d, yyyy' }} - {{ week.end | date:'MMMM d, yyyy' }}
-            </li>
-        </ul>
+        <button ng-repeat="week in history" ng-click="showHistory(week)" class="btn btn-default week-button">
+            {{ week.start | date:'MMMM d, yyyy' }} - {{ week.end | date:'MMMM d, yyyy' }}
+        </button>
     </section>
 </section>

@@ -21,7 +21,7 @@ function oneByUserIdAndType(userId, contactType, callback) {
 function allByUser(userId, callback) {
     connect((client, end) => {
         var query = `
-        SELECT * FROM contactsg
+        SELECT * FROM contacts
         WHERE user_id=$1
         `;
         client.query(query, [userId], (err, result) => {
@@ -29,7 +29,6 @@ function allByUser(userId, callback) {
             if (err) {
                 console.log(err);
             } else {
-                // console.log('Contact result', result.rows);
                 callback(result.rows);
             }
         });

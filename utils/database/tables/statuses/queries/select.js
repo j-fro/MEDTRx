@@ -13,7 +13,6 @@ function mostRecentByUserId(userId, callback) {
             if (err) {
                 console.log(err);
             } else {
-                console.log('Result', result.rows);
                 callback(result.rows[0]);
             }
         });
@@ -36,7 +35,6 @@ function weeklyByUserId(userId, weekStartDate, weekEndDate) {
             `;
             client.query(query, [userId, weekStartDate, weekEndDate], (err, result) => {
                 end();
-                console.log('Result:', result);
                 if (err) {
                     reject(err);
                 } else {

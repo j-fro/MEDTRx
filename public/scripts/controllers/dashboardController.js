@@ -94,11 +94,16 @@ angular.module('msApp').controller('DashboardController', ['$scope', '$http', '$
         $http.get('/organizer/earliest')
             .then(function(response) {
                 $scope.viewHistory = true;
+                console.log('View history:', $scope.viewHistory);
                 $scope.history = buildHistory(new Date(response.data.created));
             })
             .catch(function(err) {
                 console.log(err);
             });
+    };
+
+    $scope.hideHistory = function() {
+        $scope.viewHistory = false;
     };
 
     // Set all days before today to false

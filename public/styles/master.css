@@ -74,8 +74,9 @@ header nav ul li a{
     color: #b39999;
 }
 
-.history-week:hover {
-    cursor: pointer;
+.week-button {
+    display: block;
+    margin: 10px 0 10px 0;
 }
 
 .page-wrap {
