@@ -1,6 +1,5 @@
 const express = require('express');
 const pg = require('pg');
-var db2 = require('../../utils/dbUtils');
 const auth = require('../../utils/auth');
 const db = require('../../utils/database/db');
 let router = express.Router();
@@ -15,15 +14,12 @@ router.get('/earliest', auth.checkIfAuthenticated, (req, res) => {
 });
 
 router.get('/device', auth.checkIfAuthenticated, (req, res) => {
-    findUsersDevice(req.user.id, function(err, result) {
-        console.log('error', err);
-        if (err) {
+    db.devices.select.oneByUserId(req.user.id)
+        .then(device => res.send(device))
+        .catch((err) => {
             console.log(err);
             res.sendStatus(500);
-        } else {
-            res.send(result);
-        }
-    });
+        });
 });
 
 /*
@@ -100,96 +96,5 @@ router.put('/', auth.checkIfAuthenticated, (req, res) => {
         }
     });
 });
-
-/*
- * Takes a device ID and a callback function and queries the database. If there
- * were no errors, executes the callback with the most recent entry for that
- * device in the form (null, [entry]) where null indicates that there was no
- * error. The [entry] CAN be undefined if the device ID was not found in the DB.
- * Otherwise, executes the callback with the error
- */
-// function findMostRecentStatusByDeviceId(deviceId, callback) {
-//     db2.connect(function(client, end) {
-//         if (client) {
-//             client.query('SELECT * FROM statuses WHERE device_name=$1 ORDER BY created DESC LIMIT 1', [deviceId], function(err, result) {
-//                 end();
-//                 if (err) {
-//                     callback(err);
-//                 } else {
-//                     callback(null, result.rows[0]);
-//                 }
-//             });
-//         }
-//     });
-// }
-
-/*
- * Takes an email (user identification) and callback function and queries the
- * database for the current week's statuses. If there were no errors, executes
- * the callback with the week's entries for the user in the form (null, [entries])
- * where null indicates that there was no error. The [entries] CAN be undefined
- * if the user has no statuses in the DB. Otherwise, executes the callback with
- * the error
- */
-function findWeeklyStatusesByEmail(email, callback) {
-    console.log('Finding weekly statuses');
-    var dateToFind = new Date();
-    dateToFind.setDate(dateToFind.getDate() - dateToFind.getDay());
-    dateToFind.setHours(0);
-    dateToFind.setMinutes(0);
-    dateToFind.setSeconds(0);
-    var query = 'SELECT statuses.* FROM statuses ' +
-        'JOIN devices ON statuses.device_name=devices.device_id ' +
-        'JOIN users ON devices.user_id=users.id ' +
-        'WHERE users.email=$1 AND statuses.created >= $2';
-    db2.connect(function(client, end) {
-        if (client) {
-            client.query(query, [email, dateToFind], function(err, result) {
-                end();
-                if (err) {
-                    callback(err);
-                } else {
-                    callback(null, result.rows);
-                }
-            });
-        }
-    });
-}
-
-/*
- * Finds a device for the supplied userId. If a device is found, executes the
- * callback with the device's ID in the form (null, deviceId). If an error
- * occurred, executes the callback with the error [(callback(error))]
- */
-function findUsersDevice(userId, callback) {
-    db2.connect(function(client, end) {
-        client.query('SELECT device_id FROM devices WHERE user_id=$1 LIMIT 1', [userId], function(err, result) {
-            end();
-            console.log(result.rows);
-            if (err) {
-                callback(err);
-            } else if (result.rows.length > 0) {
-                callback(err, result.rows[0]);
-            } else {
-                callback('No device found');
-            }
-        });
-    });
-}
-
-function createStatus(deviceId, status, callback) {
-    db2.connect(function(client, end) {
-        if (client) {
-            client.query('INSERT INTO statuses (device_name, status) VALUES ($1, $2)', [deviceId, status], function(err) {
-                end();
-                if (err) {
-                    callback(err);
-                } else {
-                    callback();
-                }
-            });
-        }
-    });
-}
 
 module.exports = router;

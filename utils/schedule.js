@@ -1,35 +1,17 @@
-var pg = require('pg');
-var schedule = require('node-schedule');
-var db = require('../utils/database/db');
-var twilio = require('./twilioClient');
+const pg = require('pg');
+const schedule = require('node-schedule');
+const db = require('../utils/database/db');
+const twilio = require('./twilioClient');
 
-var scheduleReminder = function(userId) {
+function scheduleReminder(userId) {
     db.reminders.select.oneByUserId(userId, function(err, reminder) {
         if (reminder) {
             let reminderDate = buildReminderDate(reminder.reminder_time);
             console.log('Scheduling for', reminder.user_id, 'at', reminderDate);
             addToSchedule(userId, reminderDate);
-            // schedule.scheduleJob(reminderDate, function() {
-            //     db.statuses.select.mostRecentByUserId(userId, function(status) {
-            //         console.log('Found a status:', status);
-            //         if (status) {
-            //             status.created = new Date(status.created);
-            //             status.created = status.created.setHours(status.created.getHours() + 12);
-            //         }
-            //         if (!status || new Date(status.created).getDate() === today.getDate()) {
-            //             console.log('Sending a reminder for', userId);
-            //             db.contacts.select.oneByUserIdAndType(userId, 'phone', function(result) {
-            //                 result.forEach(function(contact) {
-            //                     twilio.sendSms(contact.contact, 'Hey look Im a text messsage');
-            //                 });
-            //             });
-            //         }
-            //     });
-            //     scheduleReminder(userId);
-            // });
         }
     });
-};
+}
 
 function scheduleAllReminders() {
     db.reminders.select.all()
