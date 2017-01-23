@@ -8,34 +8,32 @@ let router = express.Router();
 router.use(auth.checkIfAuthenticated);
 
 router.get('/', (req, res) => {
-    db.contacts.select.allByUser(req.user.id, (result) => {
-        console.log('Contact result:', result);
-        res.send(result);
-    });
+    db.contacts.select.allByUser(req.user.id)
+        .then(result => res.send(result))
+        .catch((err) => {
+            console.log(err);
+            res.sendStatus(500);
+        });
 });
 
 router.post('/', (req, res) => {
     console.log('Adding a contact:', req.body);
-    db.contacts.insert.contact(req.user.id, req.body.contact, req.body.contactType, (err) => {
-        if (err) {
+    db.contacts.insert.contact(req.user.id, req.body.contact, req.body.contactType)
+        .then(() => res.sendStatus(201))
+        .catch((err) => {
             console.log(err);
             res.sendStatus(500);
-        } else {
-            res.sendStatus(201);
-        }
-    });
+        });
 });
 
 router.put('/', (req, res) => {
     console.log('Updating a contact:', req.body);
-    db.contacts.update.contact(req.body.contactId, req.body.contact, (err) => {
-        if (err) {
+    db.contacts.update.contact(req.body.contactId, req.body.contact)
+        .then(() => res.sendStatus(200))
+        .catch((err) => {
             console.log(err);
             res.sendStatus(500);
-        } else {
-            res.sendStatus(200);
-        }
-    });
+        });
 });
 
 router.delete('/:contactId', (req, res) => {

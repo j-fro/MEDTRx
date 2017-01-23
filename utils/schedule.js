@@ -37,11 +37,13 @@ function addToSchedule(userId, reminderDate) {
             }
             if (!status || new Date(status.created).getDate() === today.getDate()) {
                 console.log('Sending a reminder for', userId);
-                db.contacts.select.oneByUserIdAndType(userId, 'phone', function(result) {
-                    result.forEach(function(contact) {
-                        twilio.sendSms(contact.contact, 'Hey look Im a text messsage');
-                    });
-                });
+                db.contacts.select.allByUserIdAndType(userId, 'phone')
+                    .then((contacts) => {
+                        result.forEach(function(contact) {
+                            twilio.sendSms(contact.contact, 'Hey look Im a text messsage');
+                        });
+                    })
+                    .catch(err => console.log(err));
             }
         });
         scheduleReminder(userId);
