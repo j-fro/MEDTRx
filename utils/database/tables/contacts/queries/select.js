@@ -35,7 +35,27 @@ function allByUser(userId, callback) {
     });
 }
 
+function allForUserIds(userIdArray) {
+    return new Promise((resolve, reject) => {
+        connect((client, end) => {
+            let query = `
+            SELECT * FROM contacts
+            WHERE user_id IN $1
+            `;
+            client.query(query, [userIdArray], (err, result) => {
+                end();
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result.rows);
+                }
+            });
+        });
+    });
+}
+
 module.exports = {
     oneByUserIdAndType: oneByUserIdAndType,
-    allByUser: allByUser
+    allByUser: allByUser,
+    allForUserIds: allForUserIds
 };

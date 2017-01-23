@@ -4,7 +4,7 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const path = require('path');
 const passport = require('../strategies/userStrategy');
-const scheduleReminder = require('../utils/schedule');
+const schedule = require('../utils/schedule');
 
 let app = express();
 
@@ -49,8 +49,7 @@ app.set('port', (process.env.PORT || 3000));
 
 app.listen(app.get('port'), '0.0.0.0', function() {
     console.log('Listening on port', app.get('port'));
-    scheduleReminder(4);
-    scheduleReminder(6);
+    schedule.scheduleAllReminders();
 });
 
 module.exports = app;
