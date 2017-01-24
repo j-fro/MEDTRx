@@ -2,6 +2,7 @@ const pg = require('pg');
 const schedule = require('node-schedule');
 const db = require('../utils/database/db');
 const twilio = require('./twilioClient');
+const DAY_IN_MS = 86400000;
 
 function scheduleReminder(userId) {
     db.reminders.select.oneByUserId(userId, function(err, reminder) {
@@ -28,18 +29,22 @@ function scheduleAllReminders() {
 }
 
 function addToSchedule(userId, reminderDate) {
+    console.log('In addToSchedule');
     schedule.scheduleJob(reminderDate, function() {
+        console.log('In addToSchedule: scheduling a job at:', reminderDate);
         db.statuses.select.mostRecentByUserId(userId, function(status) {
-            console.log('Found a status:', status);
+            console.log('In addToSchedule: found a status:', status);
             if (status) {
                 status.created = new Date(status.created);
-                status.created = status.created.setHours(status.created.getHours() + 12);
+                // status.created.setHours(status.created.getHours() + 12);
+                console.log('In addToSchedule: status time is now:', status.created.getHours() + ':' + status.created.getMinutes());
             }
-            if (!status || new Date(status.created).getDate() === today.getDate()) {
-                console.log('Sending a reminder for', userId);
+            if (!status ||  new Date().getTime() - status.created.getTime() >= DAY_IN_MS) {
+                console.log('In addToSchedule: sending a reminder for', userId);
                 db.contacts.select.allByUserIdAndType(userId, 'phone')
                     .then((contacts) => {
-                        result.forEach(function(contact) {
+                        console.log('Contacts:', contacts);
+                        contacts.forEach(function(contact) {
                             twilio.sendSms(contact.contact, 'Hey look Im a text messsage');
                         });
                     })
