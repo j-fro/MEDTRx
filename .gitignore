@@ -4,3 +4,4 @@ node_modules/
 twiliostuff
 .jshintrc
 twilio.sh
+sendgrid.env

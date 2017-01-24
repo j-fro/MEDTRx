@@ -1,5 +1,5 @@
-const pg = require('pg');
 const schedule = require('node-schedule');
+const sendEmail = require('../utils/sendGridClient').sendEmail;
 const db = require('../utils/database/db');
 const twilio = require('./twilioClient');
 const DAY_IN_MS = 86400000;
@@ -49,6 +49,19 @@ function addToSchedule(userId, reminderDate) {
                         });
                     })
                     .catch(err => console.log(err));
+                db.contacts.select.allByUserIdAndType(userId, 'email')
+                    .then((contacts) => {
+                        console.log('In addToSchedule: email contacts:', contacts);
+                        let message = {
+                            type: 'text/plain',
+                            value: 'You missed your medication check-in on ' +
+                            new Date().getDay()
+                        };
+                        contacts.forEach((contact) => {
+                            sendEmail({email: contact.contact}, 'You missed your check-in', message)
+                                .catch((err) => console.log(err.response.body.errors));
+                        });
+                    });
             }
         });
         scheduleReminder(userId);
