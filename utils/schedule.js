@@ -36,7 +36,6 @@ function addToSchedule(userId, reminderDate) {
             console.log('In addToSchedule: found a status:', status);
             if (status) {
                 status.created = new Date(status.created);
-                // status.created.setHours(status.created.getHours() + 12);
                 console.log('In addToSchedule: status time is now:', status.created.getHours() + ':' + status.created.getMinutes());
             }
             if (!status ||  new Date().getTime() - status.created.getTime() >= DAY_IN_MS) {
@@ -76,8 +75,9 @@ function buildReminderDate(reminderTime) {
         today.getDate(),
         reminderTime.slice(0, 2),
         reminderTime.slice(3, 5),
-        today.getSeconds() + 10
+        today.getSeconds()
     );
+    reminderDate.setDate(today.getDate() + 1);
     return reminderDate;
 }
 
