@@ -36,7 +36,8 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
             .then(function(response) {
                 console.log(response);
                 if (response.status === 200) {
-                    $scope.saved = true;
+                    // $scope.saved = true;
+                    swal('Saved data successfully');
                     $scope.existingDevice();
                 }
             })
@@ -60,7 +61,7 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
                 reminderTime: $scope.reminderTimeIn
             })
             .then(function(response) {
-                $scope.saved = true;
+                swal('Saved data successfully');
             })
             .catch(function(err) {
                 console.log(err);
@@ -89,7 +90,7 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
         $http.post('/contact', contactToSend)
             .then(function(response) {
                 if (response.status === 201) {
-                    $scope.saved = true;
+                    swal('Saved data successfully');
                     $scope.contact = undefined;
                     $scope.existingContact();
                 }
@@ -110,7 +111,7 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
             };
             $http.put('/contact', contactToSend)
                 .then(function(response) {
-                    $scope.saved = true;
+                    swal('Saved data successfully');
                     $scope.existingContact();
                 })
                 .catch(function(err) {
@@ -122,7 +123,7 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
     $scope.removeContact = function(contactId) {
         $http.delete('/contact/' + contactId)
             .then(function(response) {
-                $scope.saved = true;
+                swal('Saved data successfully');
                 $scope.existingContact();
             })
             .catch(function(err) {

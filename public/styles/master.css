@@ -7,6 +7,20 @@ html, body {
     font-family: 'Comfortaa', sans-serif;
 }
 
+.sweet-alert {
+    background-color: #8d2727;
+}
+
+.sweet-alert h2 {
+    font-family: 'Comfortaa', sans-serif;
+    color: #FFFFF0;
+}
+
+.sweet-alert .sa-button-container .sa-confirm-button-container .confirm {
+    background-color: #FFFFF0 !important;
+    color: #8d2727;
+}
+
 header, footer {
     background-color: #8d2727;
     color: #FFFFF0;
