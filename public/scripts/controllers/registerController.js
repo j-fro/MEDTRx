@@ -13,7 +13,21 @@ angular.module('msApp').controller('RegisterController', ['$scope', '$http', '$w
         .then(function(response) {
             console.log(response);
             if(response.status === 201) {
-                $window.location.href = '/';
+                $http.post('/login', {
+                    username: $scope.emailIn,
+                    password: $scope.passwordIn
+                })
+                    .then(function(response) {
+                        if (response.status === 200) {
+                            swal({title: "Great! Now let's set up your profile"}, function() {
+                                $window.location.href = '#!/profile';
+                                $window.location.reload();
+                            });
+                        }
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                    });
             }
         })
         .catch(function(err) {
