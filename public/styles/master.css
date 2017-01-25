@@ -49,6 +49,10 @@ header nav ul li a{
     border-bottom: 0 !important;
 }
 
+header nav ul li {
+    cursor: pointer;
+}
+
 .glyphicon-ok {
     color: green;
 }
