@@ -5,3 +5,4 @@ twiliostuff
 .jshintrc
 twilio.sh
 sendgrid.env
+nodemon.json
