@@ -12,14 +12,14 @@ angular.module('msApp').controller('NavController', ['$scope', '$window', 'AuthF
         });
 
     $scope.logout = function() {
-        AuthFactory.logout()
-            .then(function(response) {
-                swal({
-                    title: 'Are you sure you want to log out?',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes',
-                    closeOnConfirm: false
-                }, function() {
+        swal({
+            title: 'Are you sure you want to log out?',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            closeOnConfirm: false
+        }, function() {
+            AuthFactory.logout()
+                .then(function(response) {
                     swal({
                         title: 'Logged out successfully'
                     }, function() {
@@ -27,6 +27,6 @@ angular.module('msApp').controller('NavController', ['$scope', '$window', 'AuthF
                         $window.location.href = '/';
                     });
                 });
-            });
+        });
     };
 }]);
