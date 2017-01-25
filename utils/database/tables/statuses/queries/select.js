@@ -74,6 +74,7 @@ function mostRecentByDeviceId(deviceId, callback) {
         ORDER BY created DESC LIMIT 1
         `;
         client.query(query, [deviceId], (err, result) => {
+            end();
             callback(err, result.rows[0]);
         });
     });
