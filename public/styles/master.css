@@ -45,7 +45,7 @@ header a:hover, header a:focus {
     background-color: #FFFFF0 !important;
 }
 
-header nav ul li a{
+header nav ul li a {
     border-bottom: 0 !important;
 }
 
@@ -69,14 +69,15 @@ header nav ul li {
     top: 35%;
     background-color: #8d2727;
     color: #FFFFF0;
-    text-align: right;;
+    text-align: right;
+    ;
     vertical-align: middle;
     border-radius: 5px;
     z-index: 1;
 }
 
 .saved-modal button {
-    background-color: rgba(0,0,0,0);
+    background-color: rgba(0, 0, 0, 0);
     color: #FFFFF0;
 }
 
@@ -108,15 +109,24 @@ input.ng-invalid.ng-touched {
 }
 
 .page-wrap:after {
-  content: "";
-  display: block;
+    content: "";
+    display: block;
 }
 
 .footer, .page-wrap:after {
     height: 50px;
 }
 
-h2 {
+.medtrx-logo {
     font-family: 'Roboto Mono', monospace;
+}
+
+h2 {
     font-size: 44px;
+}
+
+.medtrx-intro {
+    text-align: center;
+    width: 80%;
+    margin:auto;
 }
