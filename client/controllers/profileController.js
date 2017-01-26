@@ -74,21 +74,21 @@ angular.module('msApp').controller('ProfileController', [
                 });
         };
 
-        $scope.existingContact = () => {
+        $scope.existingContact = function() {
             $http
                 .get('/contact')
-                .then(response => {
+                .then(function(response) {
                     $scope.contacts = response.data;
                     response.data.forEach(function(contact) {
                         $scope.contactValues[contact.id] = contact.contact;
                     });
                 })
-                .catch(err => {
+                .catch(function(err) {
                     console.log(err);
                 });
         };
 
-        $scope.saveContact = () => {
+        $scope.saveContact = function() {
             var contactToSend = {
                 contact: $scope.contact,
                 contactType: $scope.contactType
