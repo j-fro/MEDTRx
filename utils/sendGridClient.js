@@ -1,11 +1,7 @@
 const helper = require('sendgrid').mail;
 const sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
 
-let from_email = new helper.Email("MEDTRx@MEDTRx.com");
-let to_email = new helper.Email("jacob.h.froman@gmail.com");
-let subject = "Sending with SendGrid is Fun";
-let content = new helper.Content("text/plain", "and easy to do anywhere, even with Node.js");
-let mail = new helper.Mail(from_email, subject, to_email, content);
+let from_email = new helper.Email('MEDTRx@MEDTRx.com');
 
 module.exports = {
     sendEmail: (toEmail, subject, content) => {

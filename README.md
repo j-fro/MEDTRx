@@ -9,6 +9,13 @@ To set up the MEDTR<sub>x</sub> web server locally:
 * Install dependencies using `npm install`
 * MEDTR<sub>x</sub> requires a SQL DBMS to be present and a database URI at `DATABASE_URL` in the environment. MEDTR<sub>x</sub> was developed with [PostgreSQL](https://www.postgresql.org/) and [node-postgres](https://github.com/brianc/node-postgres).
     * Use your choice of SQL management tool to run `/database/create-tables.sql`
+* In order to use the notification system, Twilio and Sendgrid accounts and API keys are required.
+    * For text integration with Twilio, the following environment variabls must be set:
+        * `TWILIO_ACCOUNT_SID`
+        * `TWILIO_AUTH_TOKEN`
+        * `TWILIO_NUMBER`
+    * For email integration with Sendgrid, the following environment variable must be set:
+        * `SENDGRID_API_KEY`
 
 ##Dashboard
 
@@ -32,3 +39,6 @@ On the profile tab, users can save the time they want to be reminded and what co
 * Bootstrap
 * Passport
 * bcrypt
+* Twilio
+* Sendgrid
+* node-schedule
