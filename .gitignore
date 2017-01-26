@@ -6,3 +6,6 @@ twiliostuff
 twilio.sh
 sendgrid.env
 nodemon.json
+public/css
+public/vendors
+public/scripts
