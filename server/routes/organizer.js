@@ -87,14 +87,12 @@ router.post('/:deviceId', (req, res) => {
 router.put('/', auth.checkIfAuthenticated, (req, res) => {
     console.log('Received put with:', req.body);
     console.log('From:', req.user);
-    addDeviceToUser(req.body.deviceId, req.user.id, function(err) {
-        if (err) {
+    db.devices.insert.one(req.body.deviceId, req.user.id)
+        .then(() => res.sendStatus(200))
+        .catch((err) => {
             console.log(err);
             res.sendStatus(500);
-        } else {
-            res.sendStatus(200);
-        }
-    });
+        });
 });
 
 module.exports = router;

@@ -4,36 +4,38 @@
     <p class="">Saved data successfully</p>
 </div>
 <form class="form-group form-inline row">
-    <label for="reminder-time" class="col-xs-5 col-md-3">Remind Me After:</label>
-    <div class="col-xs-5 col-md-3">
+    <label for="reminder-time" class="col-xs-4 col-md-3">Remind Me After:</label>
+    <div class="col-xs-6 col-md-3">
         <input type="time" name="reminder-time" value="{{ reminderTime | date:'HH:mm' }}" ng-model="reminderTimeIn" class="form-control" required>
     </div>
     <input type="submit" ng-click="saveReminder()" value="Save" class="col-xs-2 btn btn-default">
 </form>
 <form class="form-group form-inline row">
-    <label class="col-xs-5 col-md-3">Send Notifications To:</label>
-    <div class="col-xs-5 col-md-3">
-        <input type="text" name="" ng-model="contact" class="form-control" required>
-    </div>
-    <!-- <button ng-click="addNumber" class="btn btn-default">+</button> -->
-    <div class="col-xs-1">
+    <label class="col-xs-4 col-md-3">Send Notifications To:</label>
+    <div class="col-xs-6 col-md-3">
         <select class="form-control" ng-model="contactType" ng-init="contactType='phone'">
             <option value="phone" selected>Mobile</option>
-            <option value="email" selected>Email</option>
+            <option value="email">Email</option>
         </select>
+        <input type="text" name="" ng-model="contact" class="form-control" required>
+
     </div>
+    <!-- <button ng-click="addNumber" class="btn btn-default">+</button> -->
+    <!-- <div class="col-xs-1">
+
+    </div> -->
     <div class="">
-        <input type="submit" ng-click="saveContact()" value="Save" class="col-xs-1 btn btn-default">
+        <button type="submit" ng-click="saveContact()" value="" class="col-xs-2 btn btn-default "><i class="glyphicon glyphicon-plus"></i></button>
     </div>
 </form>
 <div ng-repeat="contact in contacts" class="row">
-    <label ng-hide="editing === contact.$index" class="col-xs-5 col-md-3 col-xs-offset-5 col-md-offset-3">{{ contact.contact }} ({{ contact.contact_type }})</label>
-    <div ng-show="editing === contact.$index" class="col-xs-5 col-md-3 col-xs-offset-5 col-md-offset-3">
+    <label ng-hide="editing === contact.$index" class="col-xs-4 col-md-3 col-xs-offset-4 col-md-offset-3">{{ contact.contact }} ({{ contact.contact_type }})</label>
+    <div ng-show="editing === contact.$index" class="col-xs-4 col-md-3 col-xs-offset-4 col-md-offset-3">
         <input class="form-control" type="text" ng-model="contactValues[contact.id]">
     </div>
-    <button class="btn btn-default col-xs-1" ng-click="editing=contact.$index" ng-hide="editing === contact.$index"><i class="glyphicon glyphicon-edit"></i></button>
-    <button class="btn btn-default col-xs-1" ng-click="editing=null;editContact(contact)" ng-show="editing === contact.$index"><i class="glyphicon glyphicon-ok"></i></button>
-    <button class="btn btn-default col-xs-1" ng-click="removeContact(contact.id)"><i class="glyphicon glyphicon-remove"></i></button>
+    <button class="btn btn-default col-xs-2 col-md-1" ng-click="editing=contact.$index" ng-hide="editing === contact.$index"><i class="glyphicon glyphicon-edit"></i></button>
+    <button class="btn btn-default col-xs-2 col-md-1" ng-click="editing=null;editContact(contact)" ng-show="editing === contact.$index"><i class="glyphicon glyphicon-ok"></i></button>
+    <button class="btn btn-default col-xs-2 col-md-1" ng-click="removeContact(contact.id)"><i class="glyphicon glyphicon-remove"></i></button>
 </div>
 
 <form ng-hide="registeredDevice" class="form-group form-inline row">

@@ -61,19 +61,8 @@ header nav ul li {
     color: red;
 }
 
-.saved-modal {
-    position: fixed;
-    width: 30%;
-    height: 30%;
-    left: 35%;
-    top: 35%;
-    background-color: #8d2727;
-    color: #FFFFF0;
-    text-align: right;
-    ;
-    vertical-align: middle;
-    border-radius: 5px;
-    z-index: 1;
+.glyphicon-plus {
+    color: green;
 }
 
 .saved-modal button {
@@ -127,6 +116,6 @@ h2 {
 
 .medtrx-intro {
     text-align: center;
-    width: 80%;
+    /*width: 80%;*/
     margin:auto;
 }

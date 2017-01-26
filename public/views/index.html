@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>MEDTRx Dashboard</title>
     <script src="vendors/angular.min.js" charset="utf-8"></script>
     <script src="vendors/angular-route.min.js" charset="utf-8"></script>
@@ -26,19 +26,20 @@
         <nav>
             <ul class="nav nav-tabs nav-justified">
                 <li>
-                    <h2 class="medtrx-logo">MEDTR<sub>x</sub></h2></li>
+                    <h2 class="medtrx-logo">MEDTR<sub>x</sub></h2>
+                </li>
                 <li ng-if="loggedIn"><a href="#!/dashboard">Dashboard</a></li>
                 <li ng-if="loggedIn"><a href="#!/profile">Profile</a></li>
                 <li ng-if="loggedIn"><a ng-click="logout()">Logout</a></li>
             </ul>
         </nav>
     </header>
-    <div class="page-wrap">
-        <main class="container">
+    <!-- <div> -->
+        <main class="container page-wrap">
             <ng-view>
             </ng-view>
         </main>
-    </div>
+    <!-- </div> -->
     <footer class="footer">
         <p><small>&copy; 2017 Jacob Froman</small></p>
     </footer>

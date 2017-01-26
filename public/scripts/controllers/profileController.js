@@ -37,7 +37,7 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
                 console.log(response);
                 if (response.status === 200) {
                     // $scope.saved = true;
-                    swal('Saved data successfully');
+                    swal('Added device successfully');
                     $scope.existingDevice();
                 }
             })
@@ -61,7 +61,7 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
                 reminderTime: $scope.reminderTimeIn
             })
             .then(function(response) {
-                swal('Saved data successfully');
+                swal('Updated time successfully');
             })
             .catch(function(err) {
                 console.log(err);
@@ -90,7 +90,7 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
         $http.post('/contact', contactToSend)
             .then(function(response) {
                 if (response.status === 201) {
-                    swal('Saved data successfully');
+                    swal('Added contact successfully');
                     $scope.contact = undefined;
                     $scope.existingContact();
                 }
@@ -111,7 +111,7 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
             };
             $http.put('/contact', contactToSend)
                 .then(function(response) {
-                    swal('Saved data successfully');
+                    swal('Saved contact successfully');
                     $scope.existingContact();
                 })
                 .catch(function(err) {
@@ -123,7 +123,7 @@ angular.module('msApp').controller('ProfileController', ['$scope', '$http', '$wi
     $scope.removeContact = function(contactId) {
         $http.delete('/contact/' + contactId)
             .then(function(response) {
-                swal('Saved data successfully');
+                swal('Removed contact successfully');
                 $scope.existingContact();
             })
             .catch(function(err) {
