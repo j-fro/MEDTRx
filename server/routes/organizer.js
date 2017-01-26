@@ -5,18 +5,20 @@ const db = require('../../utils/database/db');
 let router = express.Router();
 
 router.get('/earliest', auth.checkIfAuthenticated, (req, res) => {
-    db.statuses.select.earliestByUserId(req.user.id)
+    db.statuses.select
+        .earliestByUserId(req.user.id)
         .then(result => res.send(result))
-        .catch((err) => {
+        .catch(err => {
             console.log(err);
             res.sendStatus(500);
         });
 });
 
 router.get('/device', auth.checkIfAuthenticated, (req, res) => {
-    db.devices.select.oneByUserId(req.user.id)
+    db.devices.select
+        .oneByUserId(req.user.id)
         .then(device => res.send(device))
-        .catch((err) => {
+        .catch(err => {
             console.log(err);
             res.sendStatus(500);
         });
@@ -41,12 +43,13 @@ router.get('/:weekStartDate?', auth.checkIfAuthenticated, function(req, res) {
 
     weekEndDate.setDate(weekEndDate.getDate() + 7);
     console.log('Week start date:', weekStartDate);
-    db.statuses.select.weeklyByUserId(req.user.id, weekStartDate, weekEndDate)
-        .then((result) => {
+    db.statuses.select
+        .weeklyByUserId(req.user.id, weekStartDate, weekEndDate)
+        .then(result => {
             console.log(result);
             res.send(result);
         })
-        .catch((err) => {
+        .catch(err => {
             console.log(err);
             res.sendStatus(500);
         });
@@ -61,35 +64,51 @@ router.get('/:weekStartDate?', auth.checkIfAuthenticated, function(req, res) {
  * 2) the most recent entry for the sending device was not on the current day
  */
 router.post('/:deviceId', (req, res) => {
-    console.log('Received post from device:', req.params.deviceId, 'with data', req.body);
-    db.statuses.select.mostRecentByDeviceId(req.params.deviceId, (err, existing) => {
-        if (err) {
-            console.log(err);
-            res.sendStatus(500);
-            // If there are no entries for this device or the most recent entry was
-            // not today, make a new entry
-        } else if (!existing || existing.created.getDate() !== new Date().getDate()) {
-            db.statuses.insert.status(req.params.deviceId, req.body.status, (err) => {
-                if (err) {
-                    console.log(err);
-                    res.sendStatus(500);
-                } else {
-                    res.sendStatus(201);
-                }
-            });
-        } else {
-            console.log('No new entry');
-            res.sendStatus(200);
-        }
-    });
+    console.log(
+        'Received post from device:',
+        req.params.deviceId,
+        'with data',
+        req.body
+    );
+    db.statuses.select.mostRecentByDeviceId(req.params.deviceId, (
+        err,
+        existing
+    ) =>
+        {
+            if (err) {
+                console.log(err);
+                res.sendStatus(500);
+                // If there are no entries for this device or the most recent entry was
+                // not today, make a new entry
+            } else if (
+                !existing || existing.created.getDate() !== new Date().getDate()
+            ) {
+                db.statuses.insert.status(
+                    req.params.deviceId,
+                    req.body.status,
+                    err => {
+                        if (err) {
+                            console.log(err);
+                            res.sendStatus(500);
+                        } else {
+                            res.sendStatus(201);
+                        }
+                    }
+                );
+            } else {
+                console.log('No new entry');
+                res.sendStatus(200);
+            }
+        });
 });
 
 router.put('/', auth.checkIfAuthenticated, (req, res) => {
     console.log('Received put with:', req.body);
     console.log('From:', req.user);
-    db.devices.insert.one(req.body.deviceId, req.user.id)
+    db.devices.insert
+        .one(req.body.deviceId, req.user.id)
         .then(() => res.sendStatus(200))
-        .catch((err) => {
+        .catch(err => {
             console.log(err);
             res.sendStatus(500);
         });
