@@ -2,12 +2,18 @@ const express = require('express');
 const pg = require('pg');
 const auth = require('../../utils/auth');
 const db = require('../../utils/database/db');
+const knex = require('../../utils/database');
 let router = express.Router();
 
 router.get('/earliest', auth.checkIfAuthenticated, (req, res) => {
-    db.statuses.select
-        .earliestByUserId(req.user.id)
-        .then(result => res.send(result))
+    knex
+        .select('created')
+        .from('statuses')
+        .join('devices', 'statuses.device_name', 'devices.device_id')
+        .where('user_id', req.user.id)
+        .orderBy('created', 'asc')
+        .limit(1)
+        .then(statuses => res.send(statuses[0]))
         .catch(err => {
             console.log(err);
             res.sendStatus(500);
@@ -15,9 +21,11 @@ router.get('/earliest', auth.checkIfAuthenticated, (req, res) => {
 });
 
 router.get('/device', auth.checkIfAuthenticated, (req, res) => {
-    db.devices.select
-        .oneByUserId(req.user.id)
-        .then(device => res.send(device))
+    knex
+        .select('device_id')
+        .from('devices')
+        .where('user_id', req.user.id)
+        .then(devices => res.send(devices[0]))
         .catch(err => {
             console.log(err);
             res.sendStatus(500);

@@ -21,6 +21,4 @@ function oneByUserId(userId) {
     });
 }
 
-module.exports = {
-    oneByUserId: oneByUserId
-};
+module.exports = {oneByUserId: oneByUserId};
