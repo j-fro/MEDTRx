@@ -1,4 +1,5 @@
 #include "HttpClient/HttpClient.h"
+#define HOSTNAME "10.100.100.150"
 
 // Put power on an output pin to get full 5V
 int power = D6;
@@ -25,25 +26,30 @@ void setup() {
     digitalWrite(power, HIGH);
     pinMode(button, INPUT);
     // TODO update once deployed
-    request.hostname = "10.100.100.171";
+    request.hostname = HOSTNAME;
+    // request.hostname = "medtrx.herokuapp.com";
     request.port = 3000;
+    // request.port = 80;
     // TODO update path param when key function is created
-    request.path = "/organizer/banana";
+    request.path = "/organizer/506f9762d1514b6b8281fa480085df55";
 }
 
 void loop() {
     if(digitalRead(button)) {
         digitalWrite(led, HIGH);
-        String reqBody = String("{\"status\":" + String(digitalRead(button), DEC) + " }");
+        String reqBody = String("{\"status\": true }");
         request.body = reqBody;
+        Serial.println(request.hostname);
         http.post(request, response, headers);
-        delay(1000);
+        Serial.println(response.status);
+        Serial.println(response.body);
+        delay(300);
         digitalWrite(led, LOW);
         for (int i = 0; i < 10; i++) {
             digitalWrite(led, HIGH);
-            delay(500);
+            delay(100);
             digitalWrite(led, LOW);
-            delay(500);
+            delay(100);
         }
     }
 

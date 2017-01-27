@@ -83,6 +83,10 @@ header nav ul li {
     color: #b39999;
 }
 
+.cancel {
+    background-color: #ff0000 !important;
+}
+
 .week-button {
     display: block;
     margin: 10px 0 10px 0;
@@ -93,7 +97,7 @@ input.ng-invalid.ng-touched {
 }
 
 .page-wrap {
-    min-height: 100%;
+    min-height: 90%;
     margin-bottom: -50px;
 }
 

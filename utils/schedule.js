@@ -15,15 +15,21 @@ function scheduleReminder(userId) {
 }
 
 function scheduleAllReminders() {
-    db.reminders.select.all()
-        .then((reminders) => {
-            reminders.forEach((reminder) => {
-                console.log('Scheduling a reminider for', reminder.user_id, 'at', reminder.reminder_time);
+    db.reminders.select
+        .all()
+        .then(reminders => {
+            reminders.forEach(reminder => {
+                console.log(
+                    'Scheduling a reminider for',
+                    reminder.user_id,
+                    'at',
+                    reminder.reminder_time
+                );
                 let reminderDate = buildReminderDate(reminder.reminder_time);
                 addToSchedule(reminder.user_id, reminderDate);
             });
         })
-        .catch((err) => {
+        .catch(err => {
             console.log(err);
         });
 }
@@ -36,29 +42,47 @@ function addToSchedule(userId, reminderDate) {
             console.log('In addToSchedule: found a status:', status);
             if (status) {
                 status.created = new Date(status.created);
-                console.log('In addToSchedule: status time is now:', status.created.getHours() + ':' + status.created.getMinutes());
+                console.log(
+                    'In addToSchedule: status time is now:',
+                    status.created.getHours() +
+                        ':' +
+                        status.created.getMinutes()
+                );
             }
-            if (!status ||  new Date().getTime() - status.created.getTime() >= DAY_IN_MS) {
+            if (
+                !status ||
+                    new Date().getTime() - status.created.getTime() >= DAY_IN_MS
+            ) {
                 console.log('In addToSchedule: sending a reminder for', userId);
-                db.contacts.select.allByUserIdAndType(userId, 'phone')
-                    .then((contacts) => {
+                db.contacts.select
+                    .allByUserIdAndType(userId, 'phone')
+                    .then(contacts => {
                         console.log('Contacts:', contacts);
                         contacts.forEach(function(contact) {
-                            twilio.sendSms(contact.contact, 'Hey look Im a text messsage');
+                            twilio.sendSms(
+                                contact.contact,
+                                'You missed your check-in today'
+                            );
                         });
                     })
                     .catch(err => console.log(err));
-                db.contacts.select.allByUserIdAndType(userId, 'email')
-                    .then((contacts) => {
-                        console.log('In addToSchedule: email contacts:', contacts);
+                db.contacts.select
+                    .allByUserIdAndType(userId, 'email')
+                    .then(contacts => {
+                        console.log(
+                            'In addToSchedule: email contacts:',
+                            contacts
+                        );
                         let message = {
                             type: 'text/plain',
-                            value: 'You missed your medication check-in on ' +
-                            new Date().getDay()
+                            value: 'You missed your medication check-in today'
                         };
-                        contacts.forEach((contact) => {
-                            sendEmail({email: contact.contact}, 'You missed your check-in', message)
-                                .catch((err) => console.log(err.response.body.errors));
+                        contacts.forEach(contact => {
+                            sendEmail(
+                                {email: contact.contact},
+                                'You missed your check-in',
+                                message
+                            ).catch(err => console.log(err.response.body.errors));
                         });
                     });
             }
@@ -75,9 +99,9 @@ function buildReminderDate(reminderTime) {
         today.getDate(),
         reminderTime.slice(0, 2),
         reminderTime.slice(3, 5),
-        today.getSeconds()
+        today.getSeconds() + 10
     );
-    reminderDate.setDate(today.getDate() + 1);
+    // reminderDate.setDate(today.getDate() + 1);
     return reminderDate;
 }
 
