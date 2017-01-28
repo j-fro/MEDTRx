@@ -51,12 +51,14 @@ router.get('/:weekStartDate?', auth.checkIfAuthenticated, function(req, res) {
 
     weekEndDate.setDate(weekEndDate.getDate() + 7);
     console.log('Week start date:', weekStartDate);
-    db.statuses.select
-        .weeklyByUserId(req.user.id, weekStartDate, weekEndDate)
-        .then(result => {
-            console.log(result);
-            res.send(result);
-        })
+    knex
+        .select('statuses.*')
+        .from('statuses')
+        .join('devices', 'statuses.device_name', 'devices.device_id')
+        .where('user_id', req.user.id)
+        .andWhere('created', '>', weekStartDate)
+        .andWhere('created', '<', weekEndDate)
+        .then(result => res.send(result))
         .catch(err => {
             console.log(err);
             res.sendStatus(500);
@@ -113,8 +115,9 @@ router.post('/:deviceId', (req, res) => {
 router.put('/', auth.checkIfAuthenticated, (req, res) => {
     console.log('Received put with:', req.body);
     console.log('From:', req.user);
-    db.devices.insert
-        .one(req.body.deviceId, req.user.id)
+    knex
+        .insert({device_id: req.body.deviceId, user_id: req.user.id})
+        .into('devices')
         .then(() => res.sendStatus(200))
         .catch(err => {
             console.log(err);

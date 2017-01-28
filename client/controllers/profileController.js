@@ -27,8 +27,12 @@ angular.module('msApp').controller('ProfileController', [
                 .get('/organizer/device')
                 .then(function(result) {
                     console.log(result);
-                    $scope.deviceId = result.data.device_id;
-                    $scope.registeredDevice = true;
+                    if (result.data.device_id) {
+                        $scope.deviceId = result.data.device_id;
+                        $scope.registeredDevice = true;
+                    } else {
+                        $scope.registeredDevice = false;
+                    }
                 })
                 .catch(function(err) {
                     console.log(err);
