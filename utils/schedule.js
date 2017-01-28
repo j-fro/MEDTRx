@@ -99,7 +99,7 @@ function buildReminderDate(reminderTime) {
         today.getDate(),
         reminderTime.slice(0, 2),
         reminderTime.slice(3, 5),
-        today.getSeconds() + 10
+        today.getSeconds() + 60
     );
     // reminderDate.setDate(today.getDate() + 1);
     return reminderDate;
