@@ -36,19 +36,12 @@ router.get('/device', auth.checkIfAuthenticated, (req, res) => {
  * error, sends back a 500
  */
 router.get('/:weekStartDate?', auth.checkIfAuthenticated, function(req, res) {
-    let weekStartDate;
-    if (req.params.weekStartDate) {
-        weekStartDate = new Date(req.params.weekStartDate);
-    } else {
-        let today = new Date();
-        today.setDate(today.getDate() - today.getDay());
-        console.log('Today:', today);
-        weekStartDate = today;
-    }
+    let weekStartDate = validateWeekStartDate(req.params.weekStartDate);
     let weekEndDate = new Date(weekStartDate);
 
     weekEndDate.setDate(weekEndDate.getDate() + 7);
     console.log('Week start date:', weekStartDate);
+    console.log('Week end date:', weekEndDate);
     knex
         .select('statuses.*')
         .from('statuses')
@@ -56,7 +49,10 @@ router.get('/:weekStartDate?', auth.checkIfAuthenticated, function(req, res) {
         .where('user_id', req.user.id)
         .andWhere('created', '>', weekStartDate)
         .andWhere('created', '<', weekEndDate)
-        .then(result => res.send(result))
+        .then(result => {
+            console.log(result);
+            res.send(result);
+        })
         .catch(err => {
             console.log(err);
             res.sendStatus(500);
@@ -124,3 +120,14 @@ router.put('/', auth.checkIfAuthenticated, (req, res) => {
 });
 
 module.exports = router;
+
+function validateWeekStartDate(dateToCheck) {
+    if (dateToCheck) {
+        return new Date(dateToCheck);
+    } else {
+        let today = new Date();
+        today.setDate(today.getDate() - today.getDay());
+        console.log('Today:', today);
+        return today;
+    }
+}
