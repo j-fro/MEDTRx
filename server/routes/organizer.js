@@ -123,11 +123,17 @@ module.exports = router;
 
 function validateWeekStartDate(dateToCheck) {
     if (dateToCheck) {
-        return new Date(dateToCheck);
+        let date = new Date(dateToCheck);
+        date.setHours(0);
+        date.setMinutes(0);
+        date.setSeconds(0);
+        return date;
     } else {
         let today = new Date();
         today.setDate(today.getDate() - today.getDay());
-        console.log('Today:', today);
+        today.setHours(0);
+        today.setMinutes(0);
+        today.setSeconds(0);
         return today;
     }
 }
