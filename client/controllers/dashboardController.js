@@ -30,10 +30,10 @@ angular.module('msApp').controller('DashboardController', [
             $http
                 .get('/organizer')
                 .then(function(result) {
+                    for (i = 0; i < new Date().getDay(); i++) {
+                        $scope.statuses[i] = 'remove';
+                    }
                     result.data.forEach(function(status) {
-                        for (i = 0; i < new Date().getDay(); i++) {
-                            $scope.statuses[i] = 'remove';
-                        }
                         var day = new Date(status.created).getDay();
                         $scope.statuses[day] = status.status ? 'ok' : 'remove';
                     });
