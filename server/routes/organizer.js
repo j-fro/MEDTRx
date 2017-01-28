@@ -1,7 +1,5 @@
 const express = require('express');
-const pg = require('pg');
 const auth = require('../../utils/auth');
-const db = require('../../utils/database/db');
 const knex = require('../../utils/database');
 let router = express.Router();
 
@@ -80,35 +78,35 @@ router.post('/:deviceId', (req, res) => {
         'with data',
         req.body
     );
-    db.statuses.select.mostRecentByDeviceId(req.params.deviceId, (
-        err,
-        existing
-    ) =>
-        {
-            if (err) {
-                console.log(err);
-                res.sendStatus(500);
-                // If there are no entries for this device or the most recent entry was
-                // not today, make a new entry
-            } else if (
+    knex
+        .select()
+        .from('statuses')
+        .where('device_name', req.params.deviceId)
+        .orderBy('created', 'desc')
+        .limit(1)
+        .then(result => {
+            let existing = result[0];
+            if (
                 !existing || existing.created.getDate() !== new Date().getDate()
             ) {
-                db.statuses.insert.status(
-                    req.params.deviceId,
-                    req.body.status,
-                    err => {
-                        if (err) {
-                            console.log(err);
-                            res.sendStatus(500);
-                        } else {
-                            res.sendStatus(201);
-                        }
-                    }
-                );
+                knex
+                    .insert({
+                        device_name: req.params.deviceId,
+                        status: req.body.status
+                    })
+                    .into('statuses')
+                    .then(() => res.sendStatus(201))
+                    .catch(err => {
+                        console.log(err);
+                        res.sendStatus(500);
+                    });
             } else {
-                console.log('No new entry');
                 res.sendStatus(200);
             }
+        })
+        .catch(err => {
+            console.log(err);
+            res.sendStatus(500);
         });
 });
 
