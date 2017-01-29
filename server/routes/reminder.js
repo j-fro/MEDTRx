@@ -1,7 +1,4 @@
 const express = require('express');
-const pg = require('pg');
-const schedule = require('node-schedule');
-const db = require('../../utils/database/db');
 const auth = require('../../utils/auth');
 const knex = require('../../utils/database');
 let router = express.Router();

@@ -1,6 +1,5 @@
 // Modules
 const express = require('express');
-const path = require('path');
 const passport = require('passport');
 const auth = require('../../utils/auth');
 let router = express.Router();
