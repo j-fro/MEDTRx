@@ -1,11 +1,12 @@
 #include "HttpClient/HttpClient.h"
-#define HOSTNAME "10.100.100.150"
+#define HOSTNAME "10.100.100.138"
 
 // Put power on an output pin to get full 5V
 int power = D6;
 // TODO replace with button when available
 int button = D0;
 int led = D1;
+int flex = A0;
 // Client variable to send requests
 HttpClient http;
 
@@ -25,6 +26,7 @@ void setup() {
     // Set power to always on
     digitalWrite(power, HIGH);
     pinMode(button, INPUT);
+    pinMode(flex, INPUT);
     // TODO update once deployed
     request.hostname = HOSTNAME;
     // request.hostname = "medtrx.herokuapp.com";
@@ -35,7 +37,8 @@ void setup() {
 }
 
 void loop() {
-    if(digitalRead(button)) {
+    Serial.println(analogRead(flex));
+    if (analogRead(flex) > 800) {
         digitalWrite(led, HIGH);
         String reqBody = String("{\"status\": true }");
         request.body = reqBody;
@@ -52,5 +55,4 @@ void loop() {
             delay(100);
         }
     }
-
 }
